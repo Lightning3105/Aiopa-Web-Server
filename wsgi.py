@@ -232,9 +232,8 @@ pre {
     #
     start_response(status, response_headers)
     return [response_body ]
-#
-# Below for testing only
-#
+
+
 if __name__ == '__main__':
     """from wsgiref.simple_server import make_server
     httpd = make_server('localhost', 8051, application)
@@ -250,6 +249,6 @@ if __name__ == '__main__':
     port = 8080                                           
     # bind to the port
     serversocket.bind((host, port))                                  
-    print("Started server on ", str(host) + ":" + str(port))
+    testvar = "Started server on ", str(host) + ":" + str(port)
     while True:
         testvar += 1
