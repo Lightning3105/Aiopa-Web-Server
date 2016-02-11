@@ -1,1 +1,1 @@
-print("hello world"*20)
+print("start")
