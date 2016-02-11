@@ -19,6 +19,12 @@ def application(environ, start_response):
     #testvar = (host, port)
     serversocket.listen(2)
     
+    clients = {}
+    devID = '1'
+    clients[devID],addr = serversocket.accept()      
+    print("Got a connection from %s" % str(addr))
+    clients[devID].send(str(devID).encode('ascii'))
+    
     
     response_body = '''<!doctype html>
 <html lang="en">
