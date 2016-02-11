@@ -17,7 +17,7 @@ def application(environ, start_response):
     serversocket.bind((host, int(9384)))
     testvar = "Started server on ", str(host) + ":" + str(port)
     #testvar = (host, port)
-    
+    serversocket.listen(2)
     
     
     response_body = '''<!doctype html>
