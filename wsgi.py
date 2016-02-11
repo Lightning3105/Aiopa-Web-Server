@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import os
-testvar = 1
 
 def application(environ, start_response):
     pr = (environ, start_response)
@@ -231,7 +230,17 @@ pre {
     response_headers = [('Content-Type', ctype), ('Content-Length', str(len(response_body)))]
     #
     start_response(status, response_headers)
-    #return [response_body ]
+    
+    import socket
+    serversocket = socket.socket(
+            socket.AF_INET, socket.SOCK_STREAM)
+    
+    #host = environ[""]
+    
+    
+    
+    
+    return [response_body ]
 
 
 if __name__ == '__main__':
@@ -239,9 +248,7 @@ if __name__ == '__main__':
     httpd = make_server('localhost', 8051, application)
     # Wait for a single request, serve it and quit.
     httpd.handle_request()"""
-    import socket
-    serversocket = socket.socket(
-            socket.AF_INET, socket.SOCK_STREAM) 
+    
 
     # get local machine name
     host = socket.gethostname()             
