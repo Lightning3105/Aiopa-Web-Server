@@ -3,6 +3,7 @@ import os
 testvar = 1
 
 def application(environ, start_response):
+    pr = (environ, start_response)
 
     ctype = 'text/plain'
     if environ['PATH_INFO'] == '/health':
@@ -220,7 +221,8 @@ pre {
 </head>
 <body>
 <h1>Hello World</h1>
-<p> ''' + str(testvar) + '''
+<p> ''' + str(testvar) + '''</p>
+<p> ''' + str(pr) + '''</p>
 </body>
 </html>'''
     response_body = response_body.encode('utf-8')
