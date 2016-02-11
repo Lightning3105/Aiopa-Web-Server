@@ -14,7 +14,7 @@ def application(environ, start_response):
     host = environ["OPENSHIFT_PYTHON_IP"]
     port = environ["OPENSHIFT_PYTHON_PORT"]
     print((host, port))
-    serversocket.bind((host, int(8080)))
+    serversocket.bind((host, int(9384)))
     testvar = "Started server on ", str(host) + ":" + str(port)
     #testvar = (host, port)
     
