@@ -229,8 +229,6 @@ pre {
     #
     start_response(status, response_headers)
     return [response_body ]
-
-testvar = "abc124"
 #
 # Below for testing only
 #
@@ -250,3 +248,6 @@ if __name__ == '__main__':
     # bind to the port
     serversocket.bind((host, port))                                  
     print("Started server on ", str(host) + ":" + str(port))
+    testvar = 1
+    while True:
+        testvar += 1
