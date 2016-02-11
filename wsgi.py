@@ -220,7 +220,7 @@ pre {
 </head>
 <body>
 <h1>Hello World</h1>
-<p> ''' + testvar + '''
+<p> ''' + str(testvar) + '''
 </body>
 </html>'''
     response_body = response_body.encode('utf-8')
