@@ -3,6 +3,7 @@ import os
 
 def application(environ, start_response):
     pr = (environ, start_response)
+    testvar = "Hello World"
 
     ctype = 'text/plain'
     if environ['PATH_INFO'] == '/health':
