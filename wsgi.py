@@ -231,7 +231,7 @@ pre {
     response_headers = [('Content-Type', ctype), ('Content-Length', str(len(response_body)))]
     #
     start_response(status, response_headers)
-    return [response_body ]
+    #return [response_body ]
 
 
 if __name__ == '__main__':
