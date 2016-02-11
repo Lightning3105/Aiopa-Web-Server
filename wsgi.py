@@ -219,6 +219,7 @@ pre {
 </head>
 <body>
 <h1>Hello World</h1>
+<p> ''' + testvar + '''
 </body>
 </html>'''
     response_body = response_body.encode('utf-8')
@@ -229,6 +230,7 @@ pre {
     start_response(status, response_headers)
     return [response_body ]
 
+testvar = "abc124"
 #
 # Below for testing only
 #
@@ -237,3 +239,14 @@ if __name__ == '__main__':
     httpd = make_server('localhost', 8051, application)
     # Wait for a single request, serve it and quit.
     httpd.handle_request()"""
+    import socket
+    serversocket = socket.socket(
+            socket.AF_INET, socket.SOCK_STREAM) 
+
+    # get local machine name
+    host = socket.gethostname()             
+    
+    port = 8080                                           
+    # bind to the port
+    serversocket.bind((host, port))                                  
+    print("Started server on ", str(host) + ":" + str(port))
