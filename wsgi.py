@@ -3,8 +3,8 @@ import os
 
 def application(environ, start_response):
     pr = (environ, start_response)
-    testvar = "Hello World"
-    global environ
+    global environment
+    environment = environ
 
     response_body = '''<!doctype html>
 <html lang="en">
@@ -31,8 +31,8 @@ if __name__ == "__main__":
         serversocket = socket.socket(
                 socket.AF_INET, socket.SOCK_STREAM)
         
-        host = environ["OPENSHIFT_PYTHON_IP"]
-        port = environ["OPENSHIFT_PYTHON_PORT"]
+        host = environment["OPENSHIFT_PYTHON_IP"]
+        port = environment["OPENSHIFT_PYTHON_PORT"]
         print((host, port))
         serversocket.bind((host, int(9384)))
         testvar = "Started server on ", str(host) + ":" + str(port)
@@ -44,6 +44,6 @@ if __name__ == "__main__":
         clients[devID],addr = serversocket.accept()      
         print("Got a connection from %s" % str(addr))
         clients[devID].send(str(devID).encode('ascii'))
-    except:
-        print("SERVER ERROR")
+    except Exception as e:
+        print("SERVER ERROR: ", e)
     
