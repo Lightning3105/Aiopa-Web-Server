@@ -14,7 +14,7 @@ def application(environ, start_response):
     host = environ["OPENSHIFT_PYTHON_IP"]
     port = environ["OPENSHIFT_PYTHON_PORT"]
     print((host, port))
-    serversocket.bind((host, int(9384)))
+    """serversocket.bind((host, int(9384)))
     testvar = "Started server on ", str(host) + ":" + str(port)
     #testvar = (host, port)
     serversocket.listen(2)
@@ -23,7 +23,7 @@ def application(environ, start_response):
     devID = '1'
     clients[devID],addr = serversocket.accept()      
     print("Got a connection from %s" % str(addr))
-    clients[devID].send(str(devID).encode('ascii'))
+    clients[devID].send(str(devID).encode('ascii'))"""
     
     
     response_body = '''<!doctype html>
