@@ -25,6 +25,8 @@ def application(environ, start_response):
     start_response(status, response_headers)
     return [response_body ]
 
+
+print("NOT MAIN: ", __name__)
 if __name__ == '__main__':
     print("MAIN")
     try:
