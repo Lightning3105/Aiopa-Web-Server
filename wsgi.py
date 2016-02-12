@@ -4,28 +4,8 @@ import os
 def application(environ, start_response):
     pr = (environ, start_response)
     testvar = "Hello World"
+    global environ
 
-    
-    
-    import socket
-    serversocket = socket.socket(
-            socket.AF_INET, socket.SOCK_STREAM)
-    
-    host = environ["OPENSHIFT_PYTHON_IP"]
-    port = environ["OPENSHIFT_PYTHON_PORT"]
-    print((host, port))
-    """serversocket.bind((host, int(9384)))
-    testvar = "Started server on ", str(host) + ":" + str(port)
-    #testvar = (host, port)
-    serversocket.listen(2)
-    
-    clients = {}
-    devID = '1'
-    clients[devID],addr = serversocket.accept()      
-    print("Got a connection from %s" % str(addr))
-    clients[devID].send(str(devID).encode('ascii'))"""
-    
-    
     response_body = '''<!doctype html>
 <html lang="en">
 <head>
@@ -35,9 +15,7 @@ def application(environ, start_response):
 
 </head>
 <body>
-<h1>Hello World</h1>
-<p> ''' + str(testvar) + '''</p>
-<p> ''' + str(pr) + '''</p>
+<h1>Server Running!</h1>
 </body>
 </html>'''
     response_body = response_body.encode('utf-8')
@@ -46,3 +24,26 @@ def application(environ, start_response):
     response_headers = [('Content-Type', 'text/html'), ('Content-Length', str(len(response_body)))]
     start_response(status, response_headers)
     return [response_body ]
+
+if __name__ == "__main__":
+    try:
+        import socket
+        serversocket = socket.socket(
+                socket.AF_INET, socket.SOCK_STREAM)
+        
+        host = environ["OPENSHIFT_PYTHON_IP"]
+        port = environ["OPENSHIFT_PYTHON_PORT"]
+        print((host, port))
+        serversocket.bind((host, int(9384)))
+        testvar = "Started server on ", str(host) + ":" + str(port)
+        #testvar = (host, port)
+        serversocket.listen(2)
+        
+        clients = {}
+        devID = '1'
+        clients[devID],addr = serversocket.accept()      
+        print("Got a connection from %s" % str(addr))
+        clients[devID].send(str(devID).encode('ascii'))
+    except:
+        print("SERVER ERROR")
+    
