@@ -1,0 +1,132 @@
+::selection{ background-color: #E13300; color: white; }
+::moz-selection{ background-color: #E13300; color: white; }
+::webkit-selection{ background-color: #E13300; color: white; }
+
+@font-face {
+    font-family: 'RunicClear';
+    src: url('RunicClear.ttf');
+}
+
+@font-face {
+    font-family: 'RunicSolid';
+    src: url('RunicSolid.ttf');
+}
+
+@font-face {
+    font-family: 'Morris';
+    src: url('MorrisRoman.ttf');
+}
+
+html{
+    background: #00ffff; /* Old browsers; */
+    background: -moz-linear-gradient(top, #00ffff 0%, #0000ff 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, #00ffff 0%,#0000ff 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, #00ffff 0%,#0000ff 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    height: 100%;
+}
+
+body {
+    font-family: 'Morris';
+    color: #000000;
+    font-style: normal;
+    font-size: 20px;
+    line-height: 22px;
+    
+}
+
+a {
+    color: #003399;
+    background-color: transparent;
+    font-weight: normal;
+}
+
+.title {
+    padding: 0 20px;
+    background: #32373a;
+    position: relative;
+    height: 50px;
+    
+}
+
+h1 {
+    color: #ff0000;
+    margin: 0;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 50px;
+    text-transform: capitalize;
+    font-family: 'RunicClear';
+}
+
+code {
+    font-family: Consolas, Monaco, Courier New, Courier, monospace;
+    font-size: 12px;
+    background-color: #f9f9f9;
+    border: 1px solid #D0D0D0;
+    color: #002166;
+    display: block;
+    padding: 12px 10px 12px 10px;
+}
+
+#content {
+    padding: 20px;
+    zoom: 1;
+}
+
+#body{
+    margin: 0 15px 0 15px;
+}
+
+p.footer{
+    text-align: right;
+    font-size: 11px;
+    border-top: 1px solid #D0D0D0;
+    line-height: 32px;
+    padding: 0 10px 0 10px;
+    margin: 20px 0 0 0;
+}
+
+#container{
+    margin: 10px;
+    border: 1px solid #D0D0D0;
+    -webkit-box-shadow: 0 0 8px #D0D0D0;
+}
+
+/* Form Styles */
+form label{
+    display: block;
+    margin-bottom: 5px;
+}
+form input[type=text]{
+    border: 1px solid #aaa;
+    border-radius: 2px;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+    box-sizing: border-box;
+    padding: 5px;
+    margin-bottom: 20px;
+    outline: 0;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+    -moz-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+}
+form input[type=submit]{
+    background: #198ad1;
+    color: #fff;
+    display: inline-block;
+    padding: 0 20px;
+    font-size: 20px;
+    line-height: 2.6em;
+    font-family: 'Morris';
+    font-weight: 400;
+    -webkit-box-shadow: inset 0 -1px 0 rgba(0,0,0,.1);
+    -moz-box-shadow: inset 0 -1px 0 rgba(0,0,0,.1);
+    box-shadow: inset 0 -1px 0 rgba(0,0,0,.1);
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    text-transform: capitalize;
+    border: 0;
+    cursor: pointer;
+    text-align: center;
+} 
