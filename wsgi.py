@@ -2,6 +2,7 @@
 import os
 
 def application(environ, start_response):
+    print("APPLICATION")
     pr = (environ, start_response)
     global environment
     environment = environ
@@ -27,6 +28,7 @@ def application(environ, start_response):
 
 
 def runServer():
+    print("RUNSERVER")
     import socket
     serversocket = socket.socket(
             socket.AF_INET, socket.SOCK_STREAM)
