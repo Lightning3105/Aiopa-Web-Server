@@ -44,7 +44,7 @@ def runServer():
     print("Got a connection from %s" % str(addr))
     clients[devID].send(str(devID).encode('ascii'))
 
-def appliction(enviro, start_response):
+def application(enviro, start_response):
     try:
         page(start_response)
         runServer()
