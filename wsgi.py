@@ -2,11 +2,6 @@
 import os
 
 def application(environ, start_response):
-    print("APPLICATION")
-    pr = (environ, start_response)
-    global environment
-    environment = environ
-
     response_body = '''<!doctype html>
 <html lang="en">
 <head>
@@ -30,11 +25,13 @@ def application(environ, start_response):
 def runServer():
     print("RUNSERVER")
     import socket
+    import os
+    environ = os.environ
     serversocket = socket.socket(
             socket.AF_INET, socket.SOCK_STREAM)
     
-    host = environment["OPENSHIFT_PYTHON_IP"]
-    port = environment["OPENSHIFT_PYTHON_PORT"]
+    host = environ["OPENSHIFT_PYTHON_IP"]
+    port = environ["OPENSHIFT_PYTHON_PORT"]
     print((host, port))
     serversocket.bind((host, int(9384)))
     testvar = "Started server on ", str(host) + ":" + str(port)
