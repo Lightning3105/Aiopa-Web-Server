@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import os
 
-def application(environ, start_response):
+def page():
     response_body = '''<!doctype html>
 <html lang="en">
 <head>
@@ -19,7 +19,7 @@ def application(environ, start_response):
     status = '200 OK'
     response_headers = [('Content-Type', 'text/html'), ('Content-Length', str(len(response_body)))]
     start_response(status, response_headers)
-    return [response_body ]
+    #return [response_body ]
 
 
 def runServer():
@@ -45,6 +45,7 @@ def runServer():
     clients[devID].send(str(devID).encode('ascii'))
 
 try:
+    page()
     runServer()
 except Exception as e:
     print("SERVER ERROR: ", e)
