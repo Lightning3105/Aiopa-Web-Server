@@ -26,27 +26,27 @@ def application(environ, start_response):
     return [response_body ]
 
 
-print("NOT MAIN: ", __name__)
-if __name__ == '__main__':
-    print("MAIN")
-    try:
-        import socket
-        serversocket = socket.socket(
-                socket.AF_INET, socket.SOCK_STREAM)
-        
-        host = environment["OPENSHIFT_PYTHON_IP"]
-        port = environment["OPENSHIFT_PYTHON_PORT"]
-        print((host, port))
-        serversocket.bind((host, int(9384)))
-        testvar = "Started server on ", str(host) + ":" + str(port)
-        #testvar = (host, port)
-        serversocket.listen(2)
-        
-        clients = {}
-        devID = '1'
-        clients[devID],addr = serversocket.accept()      
-        print("Got a connection from %s" % str(addr))
-        clients[devID].send(str(devID).encode('ascii'))
-    except Exception as e:
-        print("SERVER ERROR: ", e)
+def runServer():
+    import socket
+    serversocket = socket.socket(
+            socket.AF_INET, socket.SOCK_STREAM)
+    
+    host = environment["OPENSHIFT_PYTHON_IP"]
+    port = environment["OPENSHIFT_PYTHON_PORT"]
+    print((host, port))
+    serversocket.bind((host, int(9384)))
+    testvar = "Started server on ", str(host) + ":" + str(port)
+    #testvar = (host, port)
+    serversocket.listen(2)
+    
+    clients = {}
+    devID = '1'
+    clients[devID],addr = serversocket.accept()      
+    print("Got a connection from %s" % str(addr))
+    clients[devID].send(str(devID).encode('ascii'))
+
+try:
+    runServer()
+except Exception as e:
+    print("SERVER ERROR: ", e)
     
