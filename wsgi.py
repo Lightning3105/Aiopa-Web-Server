@@ -3,7 +3,7 @@
 # line, it's possible required libraries won't be in your searchable path
 #
 
-import runServer as application
+from flaskServer import app as application
 
 #
 # Below for testing only

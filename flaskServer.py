@@ -6,7 +6,8 @@ app = Flask(__name__)
 def startServer(own=False):
     if own:
         app.debug = True
-    app.run(threaded=True)
+    if __name__ == '__main__':
+        app.run(threaded=True)
 
 @app.route('/')
 def form():
