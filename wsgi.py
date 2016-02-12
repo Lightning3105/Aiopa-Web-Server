@@ -25,7 +25,8 @@ def application(environ, start_response):
     start_response(status, response_headers)
     return [response_body ]
 
-if __name__ == "__main__":
+if __name__ == '__main__':
+    print("MAIN")
     try:
         import socket
         serversocket = socket.socket(
