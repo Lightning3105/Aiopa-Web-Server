@@ -51,10 +51,10 @@ def checkDatabase():
         #pickle.dump({}, f)
         #f.close()
 
-@app.route('/server/')
+@app.route('/accounts/')
 def server():
-    import socketServer
-    socketServer.startServer()
+    with open('accounts.dab', 'rb') as f:
+        return f.read()
 
 @app.route('/')
 def root():
