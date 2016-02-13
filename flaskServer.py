@@ -43,6 +43,7 @@ def checkDatabase():
     print("CHECK DATABASE")
     #try:
     f = open('accounts.dab', 'rb')
+    print("POST CHECK DATABASE")
     #except IOError:
         #f = open('accounts.dab', 'wb')
         #pickle.dump({}, f)
