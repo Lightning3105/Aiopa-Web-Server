@@ -7,4 +7,4 @@ def run(e1, e2):
     #t1.start()
     #socketServer.startServer()
     #flaskServer.startServer(e1, e2, own=True)
-    flaskServer.app(e1, e2)
+    flaskServer.app.__call__(e1, e2)
