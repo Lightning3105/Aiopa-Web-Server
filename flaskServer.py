@@ -41,12 +41,12 @@ def createaccount():
 
 def checkDatabase():
     print("CHECK DATABASE")
-    try:
-        f = open('accounts.dab', 'rb')
-    except IOError:
-        f = open('accounts.dab', 'wb')
-        pickle.dump({}, f)
-        f.close()
+    #try:
+    f = open('accounts.dab', 'rb')
+    #except IOError:
+        #f = open('accounts.dab', 'wb')
+        #pickle.dump({}, f)
+        #f.close()
 
 
 
