@@ -1,5 +1,6 @@
 from flask import Flask
 import flask
+import pickle
 
 app = Flask(__name__)
 
@@ -12,15 +13,19 @@ def startServer(own=False):
 @app.route('/createaccount/', methods=['GET', 'POST'])
 def createaccount():
     if flask.request.method == 'GET':
-        print("GET")
         return flask.render_template('form_submit.html')
     if flask.request.method == 'POST':
-        print("POST")
         username=flask.request.form['username']
         password=flask.request.form['password']
         redo = False
         unerr = ""
         pwerr = ""
+        checkDatabase()
+        accfile = open('accounts.dab', 'rb')
+        acc = pickle.load(accfile)
+        print(acc)
+        if username in acc.keys():
+            username = ""
         if username == "":
             unerr = "Username is invalid or alread exists"
             redo = True
@@ -28,11 +33,19 @@ def createaccount():
             pwerr = "Password is too short"
             redo = True
         if redo:
-            print("REDO")
             return flask.render_template('form_submit.html', unerror=unerr, pwerror=pwerr, uname=username)
         else:
-            print("REDIRECT")
             return flask.redirect(flask.url_for('accountcreated'), code=307)
+
+def checkDatabase():
+    try:
+        f = open('accounts.dab', 'rb')
+    except IOError:
+        f = open('accounts.dab', 'wb')
+        pickle.dump({}, f)
+        f.close()
+
+
 
 @app.route('/')
 def root():
@@ -43,7 +56,13 @@ def root():
 # accepting: POST requests in this case
 @app.route('/accountcreated/', methods=['POST'])
 def accountcreated():
-    print("ACCOUNT CREATED")
     username=flask.request.form['username']
     password=flask.request.form['password']
+    with open('accounts.dab', 'rb') as acc:
+        adict = pickle.load(acc)
+    with open('accounts.dab', 'wb') as acc:
+        adict[username] = {}
+        adict[username]["password"] = password
+        pickle.dump(adict, acc)
+        print(adict)
     return flask.render_template('form_action.html', username=username, password=password)
