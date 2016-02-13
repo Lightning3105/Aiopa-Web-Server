@@ -10,7 +10,7 @@ def run(e1, e2):
     #t1 = threading.Thread(target=socketServer.startServer)
     #t1.start()
     import os
-    os.system("socketServer.py")
+    os.system(os.path.join(os.path.dirname(__file__), 'accounts.dab'))
     print("AFTER THREAD")
     flsk = flaskServer.app.__call__(e1, e2)
     print(flsk)
