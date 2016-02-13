@@ -51,7 +51,7 @@ def checkDatabase():
         #pickle.dump({}, f)
         #f.close()
 
-@app.rout('/server/')
+@app.route('/server/')
 def server():
     import socketServer
     socketServer.startServer()
