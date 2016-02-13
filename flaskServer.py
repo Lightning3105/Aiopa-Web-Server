@@ -13,8 +13,10 @@ def startServer(own=False):
 @app.route('/createaccount/', methods=['GET', 'POST'])
 def createaccount():
     if flask.request.method == 'GET':
+        print("GET")
         return flask.render_template('form_submit.html')
     if flask.request.method == 'POST':
+        print("POST")
         username=flask.request.form['username']
         password=flask.request.form['password']
         redo = False
@@ -27,7 +29,7 @@ def createaccount():
         if username in acc.keys():
             username = ""
         if username == "":
-            unerr = "Username is invalid or alread exists"
+            unerr = "Username is invalid or already exists"
             redo = True
         if password == "":
             pwerr = "Password is too short"
@@ -38,6 +40,7 @@ def createaccount():
             return flask.redirect(flask.url_for('accountcreated'), code=307)
 
 def checkDatabase():
+    print("CHECK DATABASE")
     try:
         f = open('accounts.dab', 'rb')
     except IOError:
