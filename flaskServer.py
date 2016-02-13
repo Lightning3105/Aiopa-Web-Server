@@ -6,11 +6,11 @@ import os
 app = Flask(__name__)
 accdab = os.path.join(os.path.dirname(__file__),'accounts.dab')
 
-def startServer(own=False):
+def startServer(e1, e2, own=False):
     if own:
         app.debug = True
     #if __name__ == 'flaskServer':
-    app.run(threaded=True, host=os.environ["OPENSHIFT_PYTHON_IP"])
+    app.run(e1, e2, threaded=True, host=os.environ["OPENSHIFT_PYTHON_IP"])
 
 @app.route('/createaccount/', methods=['GET', 'POST'])
 def createaccount():
