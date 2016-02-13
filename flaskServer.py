@@ -10,7 +10,7 @@ def startServer(own=False):
     if own:
         app.debug = True
     #if __name__ == 'flaskServer':
-    app.run(threaded=True)
+    app.run(threaded=True, host=os.environ["OPENSHIFT_PYTHON_IP"])
 
 @app.route('/createaccount/', methods=['GET', 'POST'])
 def createaccount():
