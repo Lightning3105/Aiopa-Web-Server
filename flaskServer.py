@@ -53,7 +53,10 @@ def checkDatabase():
 
 @app.route('/accounts/')
 def server():
+    print("ACCOUNTS")
     with open('accounts.dab', 'rb') as f:
+        print("FILE:")
+        print(f)
         print(f.read())
         return f.read()
 
