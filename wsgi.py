@@ -3,12 +3,12 @@
 # line, it's possible required libraries won't be in your searchable path
 #
 import socketServer
+import threading
 from flaskServer import app as application
 print("AFTER APP RUN")
-#try:
-socketServer.startServer()
-#except Exception as e:
-    #print("SOCKET ERROR: ", e)
+
+t1 = threading.Thread(target=socketServer.startServer)
+t1.start()
 
 #
 # Below for testing only
