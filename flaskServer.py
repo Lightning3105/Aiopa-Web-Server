@@ -55,7 +55,7 @@ def checkDatabase():
 def server():
     import hashlib
     print("ACCOUNTS")
-    f = open('accounts.dab', 'rb')
+    f = open(os.path.join(os.path.dirname(__file__),'accounts.dab'), 'rb')
     print("FILE:")
     out = f.read()
     acc = pickle.loads(out)
