@@ -9,8 +9,8 @@ accdab = os.path.join(os.path.dirname(__file__),'accounts.dab')
 def startServer(own=False):
     if own:
         app.debug = True
-    if __name__ == 'flaskServer':
-        app.run(threaded=True)
+    #if __name__ == 'flaskServer':
+    app.run(threaded=True)
 
 @app.route('/createaccount/', methods=['GET', 'POST'])
 def createaccount():
