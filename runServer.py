@@ -10,3 +10,6 @@ def run(e1, e2):
     flsk = flaskServer.app.__call__(e1, e2)
     print(flsk)
     return flsk
+
+if __name__ == "__main__":
+    flaskServer.startServer(own=True)

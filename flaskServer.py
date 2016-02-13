@@ -6,11 +6,11 @@ import os
 app = Flask(__name__)
 accdab = os.path.join(os.path.dirname(__file__),'accounts.dab')
 
-def startServer(e1, e2, own=False):
+def startServer(own=False):
     if own:
         app.debug = True
     #if __name__ == 'flaskServer':
-    app.run(threaded=True, host=os.environ["OPENSHIFT_PYTHON_IP"])
+    app.run()
 
 @app.route('/createaccount/', methods=['GET', 'POST'])
 def createaccount():
@@ -53,13 +53,23 @@ def checkDatabase():
 
 @app.route('/accounts/')
 def server():
+    import hashlib
     print("ACCOUNTS")
     f = open('accounts.dab', 'rb')
     print("FILE:")
-    print(f)
-    print(f.read())
-    return f.read()
+    out = f.read()
+    acc = pickle.loads(out)
     f.close()
+    print(acc)
+    for k, v in acc.items():
+        hash_object = hashlib.md5(v['password'].encode())
+        print(hash_object.hexdigest())
+        v['password'] = hash_object.hexdigest()
+    out = pickle.dumps(acc)
+    print(out)
+    print(out)
+    return out
+    
 
 @app.route('/')
 def root():
