@@ -17,9 +17,11 @@ def startServer():
         print("Started server on ", str(host) + ":" + str(port))
         # queue up to 5 requests
         serversocket.listen(1)
-        
+        l = 1
         while True:
             #wait to accept a connection - blocking call
+            print("waiting for call, loop", l)
+            l += 1
             conn, addr = serversocket.accept()
             print ('Connected with ' + addr[0] + ':' + str(addr[1]))
     except OSError as e:
