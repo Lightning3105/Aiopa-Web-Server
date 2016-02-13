@@ -18,11 +18,9 @@ def startServer():
         # queue up to 5 requests
         serversocket.listen(1)
         
-        clients = {}
-        devID = "1"
-        # establish a connection
-        clients[devID],addr = serversocket.accept()
-        print("Got a connection from %s" % str(addr))
-        clients[devID].send(str(devID).encode('ascii'))
+        while True:
+            #wait to accept a connection - blocking call
+            conn, addr = serversocket.accept()
+            print ('Connected with ' + addr[0] + ':' + str(addr[1]))
     except OSError as e:
         print("PORT ALLREAD OPEN", e)
