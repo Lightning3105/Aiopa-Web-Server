@@ -1,11 +1,12 @@
 import socket
+import os
 
 def startServer():
     serversocket = socket.socket(
                 socket.AF_INET, socket.SOCK_STREAM) 
     
     # get local machine name
-    host = socket.gethostname()     
+    host = os.environ["OPENSHIFT_PYTHON_IP"]     
     #host = "80.42.171.141"          
     #host = "192.168.1.1"         
     
