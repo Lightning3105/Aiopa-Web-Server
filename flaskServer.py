@@ -4,6 +4,7 @@ import pickle
 import os
 
 app = Flask(__name__)
+accdab = os.path.join(os.path.dirname(__file__),'accounts.dab')
 
 def startServer(own=False):
     if own:
@@ -24,7 +25,7 @@ def createaccount():
         unerr = ""
         pwerr = ""
         checkDatabase()
-        accfile = open('accounts.dab', 'rb')
+        accfile = open(accdab, 'rb')
         acc = pickle.load(accfile)
         print(acc)
         if username in acc.keys():
@@ -63,9 +64,9 @@ def root():
 def accountcreated():
     username=flask.request.form['username']
     password=flask.request.form['password']
-    with open('accounts.dab', 'rb') as acc:
+    with open(accdab, 'rb') as acc:
         adict = pickle.load(acc)
-    with open('accounts.dab', 'wb') as acc:
+    with open(accdab, 'wb') as acc:
         adict[username] = {}
         adict[username]["password"] = password
         pickle.dump(adict, acc)
