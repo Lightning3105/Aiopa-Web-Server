@@ -69,6 +69,12 @@ def server():
     print(out)
     print(out)
     return out
+
+@app.route('/senddata/', methods=['GET', 'POST'])
+def getter():
+    data = flask.request.data
+    print(data)
+    return "SEND DATA"
     
 
 @app.route('/')
