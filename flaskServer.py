@@ -1,6 +1,7 @@
 from flask import Flask
 import flask
 import pickle
+import os
 
 app = Flask(__name__)
 
@@ -42,7 +43,7 @@ def createaccount():
 def checkDatabase():
     print("CHECK DATABASE")
     #try:
-    f = open('accounts.dab', 'rb')
+    f = open(os.path.join(os.path.dirname(__file__),'accounts.dab'), 'rb')
     print("POST CHECK DATABASE")
     #except IOError:
         #f = open('accounts.dab', 'wb')
