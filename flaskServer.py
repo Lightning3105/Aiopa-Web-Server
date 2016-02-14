@@ -74,7 +74,7 @@ def server():
 def getter():
     data = flask.request.data
     print(data)
-    return "SEND DATA"
+    return "DATA RECEIVED: " + str(data)
     
 
 @app.route('/')
