@@ -83,14 +83,22 @@ def server():
     print(out)
     return out
 
+
 @app.route('/senddata/', methods=['GET', 'POST'])
 def getter():
     from ast import literal_eval
     data = flask.request.data
-    print(data)
-    data = str(data).strip("b'").strip("'")
+    print("PRE STRING")
+    data = data.decode("utf-8")
+    """data = str(data)
+    data = data[2:]
+    data = data[:-1]"""
+    print("POST STRING")
+    
+    import json
+    data = json.loads(data)
+    print("POST LOAD")
     data = literal_eval(data)
-    print(data)
     checkDatabase()
     try:
         un = data['username']
