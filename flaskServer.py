@@ -2,14 +2,14 @@ from flask import Flask
 import flask
 import pickle
 import os
+import json
+import hashlib
 
 app = Flask(__name__)
 accdab = os.path.join(os.path.dirname(__file__),'accounts.dab')
 
-def startServer(own=False):
-    if own:
-        app.debug = True
-    #if __name__ == 'flaskServer':
+def startServer():
+    app.debug = True
     app.run()
 
 @app.route('/createaccount/', methods=['GET', 'POST'])
@@ -44,7 +44,19 @@ def createaccount():
 def checkDatabase():
     print("CHECK DATABASE")
     #try:
-    f = open(os.path.join(os.path.dirname(__file__),'accounts.dab'), 'rb')
+    try:
+        f = open(os.path.join(os.path.dirname(__file__),'accounts.dab'), 'rb')
+    except FileNotFoundError:
+        f = open(os.path.join(os.path.dirname(__file__),'accounts.dab'), 'wb')
+        f.close()
+    try:
+        with open(accdab, 'rb') as f: 
+            pickle.load(f)
+    except EOFError as e:
+        print(e)
+        f.close()
+        with open(accdab, 'wb') as f: 
+            pickle.dump({}, f)
     print("POST CHECK DATABASE")
     #except IOError:
         #f = open('accounts.dab', 'wb')
@@ -53,8 +65,9 @@ def checkDatabase():
 
 @app.route('/accounts/')
 def server():
-    import hashlib
+
     print("ACCOUNTS")
+    checkDatabase()
     f = open(os.path.join(os.path.dirname(__file__),'accounts.dab'), 'rb')
     print("FILE:")
     out = f.read()
@@ -72,8 +85,29 @@ def server():
 
 @app.route('/senddata/', methods=['GET', 'POST'])
 def getter():
+    from ast import literal_eval
     data = flask.request.data
     print(data)
+    data = str(data).strip("b'").strip("'")
+    data = literal_eval(data)
+    print(data)
+    checkDatabase()
+    try:
+        un = data['username']
+        pw = data['password']
+        with open(accdab, 'rb') as acc:
+            adict = pickle.load(acc)
+            print(adict)
+        with open(accdab, 'wb') as acc:
+            hash_object = hashlib.md5(adict[un]["password"].encode())
+            hash_object = hash_object.hexdigest()
+            if hash_object == pw:
+                del data['username']
+                del data['password']
+                adict[un].update(data)
+            pickle.dump(adict, acc)
+    except Exception as e:
+        print("SEND DATA EXCEPTION", e)
     return "DATA RECEIVED: " + str(data)
     
 
@@ -96,3 +130,6 @@ def accountcreated():
         pickle.dump(adict, acc)
         print(adict)
     return flask.render_template('form_action.html', username=username, password=password)
+
+if __name__ == "__main__":
+    startServer()
