@@ -20,15 +20,17 @@
 
 <table align="center">
     <tr>
-        <th>Position</th>
+        <th>Rank</th>
         <th>User</th>
         <th>XP</th>
     </tr>
 {% for key in korder %}
     <tr>
+        <td width="10%"> {{num}} </td>
         <td> {{ key }} </td>
-        <td> {{ tout[key] }} </td>
+        <td width="20%"> {{ tout[key] }} </td>
     </tr>
+    {% set num = num + 1 %}
 {% endfor %}
 </table>
 

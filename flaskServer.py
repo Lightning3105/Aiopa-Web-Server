@@ -104,7 +104,7 @@ def leaderboard():
             table[n] = 0
     #table = {"Borris": 5, "John": 10, "James": 9485, "Tim": 1, "Fred": 456}
     order = sorted(table, key=table.__getitem__, reverse=True)
-    return flask.render_template('leaderboard.html', tout=table, korder=order)
+    return flask.render_template('leaderboard.html', tout=table, korder=order, num=1)
 
 
 @app.route('/senddata/', methods=['GET', 'POST'])
