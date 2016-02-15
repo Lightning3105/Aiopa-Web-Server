@@ -85,6 +85,7 @@ def server():
 
 @app.route('/leaderboard')
 def leaderboard():
+    checkDatabase()
     with open(accdab, "rb") as acc:
         accs = pickle.load(acc)
     
