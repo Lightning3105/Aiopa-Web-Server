@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Handle POST requests with Flask</title>
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+<ul>
+  <li><a href="#home">Home</a></li>
+  <li><a href="{{url_for('server')}}">Accounts</a></li>
+  <li><a class="active" href="{{url_for('leaderboard')}}">Leaderboard</a></li>
+  <ul style="float:right;list-style-type:none;">
+    <li><a href="{{url_for('createaccount')}}">Create Account</a></li>
+    <li><a href="#login">Login</a></li>
+  </ul>
+</ul>
+
+<br/>
+
+<table align="center">
+    <tr>
+        <th>User</th>
+        <th>XP</th>
+    </tr>
+{% for key in korder %}
+    <tr>
+        <td> {{ key }} </td>
+        <td> {{ tout[key] }} </td>
+    </tr>
+{% endfor %}
+</table>
+
+</body>
+</html>

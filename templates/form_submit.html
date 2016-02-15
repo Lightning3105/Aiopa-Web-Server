@@ -5,11 +5,19 @@
 	<link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css" />
 </head>
 <body>
+<ul>
+  <li><a href="#home">Home</a></li>
+  <li><a href="{{url_for('server')}}">Accounts</a></li>
+  <li><a href="{{url_for('leaderboard')}}">Leaderboard</a></li>
+  <ul style="float:right;list-style-type:none;">
+    <li><a class="active" href="{{url_for('createaccount')}}">Create Account</a></li>
+    <li><a href="#login">Login</a></li>
+  </ul>
+</ul>
+
 <p>&nbsp;</p>
 
 <h1 style="text-align: center; font-size: 500%;"><strong>Create </strong></h1>
-
-<p>&nbsp;</p>
 
 <p>&nbsp;</p>
 

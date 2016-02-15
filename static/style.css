@@ -93,6 +93,7 @@ p.footer{
 }
 
 /* Form Styles */
+
 form label{
     display: block;
     margin-bottom: 5px;
@@ -129,4 +130,63 @@ form input[type=submit]{
     border: 0;
     cursor: pointer;
     text-align: center;
-} 
+}
+
+
+/* Menu Bar Stuff */
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover:not(.active) {
+    background-color: #111;
+}
+
+.active {
+    background-color: #4CAF50;
+}
+
+/* Table Stuff */
+
+table {
+    border-collapse: collapse;
+    width: 50%;
+}
+
+th, td {
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2
+}
+
+tr:nth-child(odd) {
+    background-color: #e6e6e6
+}
+
+tr:hover {
+    background-color: #ccffff
+}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+}

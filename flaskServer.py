@@ -74,30 +74,44 @@ def server():
     acc = pickle.loads(out)
     f.close()
     print(acc)
-    for k, v in acc.items():
+    """for k, v in acc.items():
         hash_object = hashlib.md5(v['password'].encode())
         print(hash_object.hexdigest())
-        v['password'] = hash_object.hexdigest()
+        v['password'] = hash_object.hexdigest()"""
     out = pickle.dumps(acc)
     print(out)
     print(out)
     return out
+
+@app.route('/leaderboard')
+def leaderboard():
+    with open(accdab, "rb") as acc:
+        accs = pickle.load(acc)
+    
+    for k, v in accs.items():
+        print("USER:", k)
+        for k, v in v.items():
+            print(k, v)
+    #names = [k for k in accs.keys() if "xp" in accs[k].keys()]
+    names = accs.keys()
+    print(names)
+    table = {}
+    for n in names:
+        if "xp" in accs[n].keys():
+            table[n] = accs[n]["xp"]
+        else:
+            table[n] = 0
+    #table = {"Borris": 5, "John": 10, "James": 9485, "Tim": 1, "Fred": 456}
+    order = sorted(table, key=table.__getitem__, reverse=True)
+    return flask.render_template('leaderboard.html', tout=table, korder=order)
 
 
 @app.route('/senddata/', methods=['GET', 'POST'])
 def getter():
     from ast import literal_eval
     data = flask.request.data
-    print("PRE STRING")
     data = data.decode("utf-8")
-    """data = str(data)
-    data = data[2:]
-    data = data[:-1]"""
-    print("POST STRING")
-    
-    import json
     data = json.loads(data)
-    print("POST LOAD")
     data = literal_eval(data)
     checkDatabase()
     try:
@@ -107,9 +121,7 @@ def getter():
             adict = pickle.load(acc)
             print(adict)
         with open(accdab, 'wb') as acc:
-            hash_object = hashlib.md5(adict[un]["password"].encode())
-            hash_object = hash_object.hexdigest()
-            if hash_object == pw:
+            if adict[un]["password"] == pw:
                 del data['username']
                 del data['password']
                 adict[un].update(data)
@@ -134,7 +146,9 @@ def accountcreated():
         adict = pickle.load(acc)
     with open(accdab, 'wb') as acc:
         adict[username] = {}
-        adict[username]["password"] = password
+        hash_object = hashlib.md5(password.encode())
+        hash_object = hash_object.hexdigest()
+        adict[username]["password"] = hash_object
         pickle.dump(adict, acc)
         print(adict)
     return flask.render_template('form_action.html', username=username, password=password)
