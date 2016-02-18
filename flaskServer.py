@@ -43,25 +43,22 @@ def createaccount():
 
 def checkDatabase():
     print("CHECK DATABASE")
-    #try:
     try:
         f = open(os.path.join(os.path.dirname(__file__),'accounts.dab'), 'rb')
     except FileNotFoundError:
+        print("FILE NOT FOUND")
         f = open(os.path.join(os.path.dirname(__file__),'accounts.dab'), 'wb')
         f.close()
     try:
         with open(accdab, 'rb') as f: 
             pickle.load(f)
     except EOFError as e:
+        print("EOFERROR")
         print(e)
         f.close()
         with open(accdab, 'wb') as f: 
             pickle.dump({}, f)
     print("POST CHECK DATABASE")
-    #except IOError:
-        #f = open('accounts.dab', 'wb')
-        #pickle.dump({}, f)
-        #f.close()
 
 @app.route('/accounts/')
 def server():
