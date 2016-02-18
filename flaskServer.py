@@ -6,7 +6,7 @@ import json
 import hashlib
 
 app = Flask(__name__)
-accdab = os.path.join(os.path.dirname(__file__),'accounts.dab')
+accdab = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, "data/accounts.dab"))
 
 def startServer():
     app.debug = True
@@ -44,10 +44,10 @@ def createaccount():
 def checkDatabase():
     print("CHECK DATABASE")
     try:
-        f = open(os.path.join(os.path.dirname(__file__),'accounts.dab'), 'rb')
+        f = open(accdab, 'rb')
     except FileNotFoundError:
         print("FILE NOT FOUND")
-        f = open(os.path.join(os.path.dirname(__file__),'accounts.dab'), 'wb')
+        f = open(accdab, 'wb')
         f.close()
     try:
         with open(accdab, 'rb') as f: 
@@ -65,7 +65,7 @@ def server():
 
     print("ACCOUNTS")
     checkDatabase()
-    f = open(os.path.join(os.path.dirname(__file__),'accounts.dab'), 'rb')
+    f = open(accdab, 'rb')
     print("FILE:")
     out = f.read()
     acc = pickle.loads(out)
@@ -149,4 +149,5 @@ def accountcreated():
     return flask.render_template('form_action.html', username=username, password=password)
 
 if __name__ == "__main__":
+    accdab = os.path.join(os.path.dirname(__file__),'accounts.dab')
     startServer()
