@@ -133,9 +133,6 @@ def getter():
 def root():
     return flask.redirect(flask.url_for('createaccount'), code=302)
 
-# Define a route for the action of the form, for example '/hello/'
-# We are also defining which type of requests this route is 
-# accepting: POST requests in this case
 @app.route('/accountcreated/', methods=['POST'])
 def accountcreated():
     username=flask.request.form['username']
