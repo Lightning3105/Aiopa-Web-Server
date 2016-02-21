@@ -131,7 +131,8 @@ def getter():
 
 @app.route('/')
 def root():
-    return flask.redirect(flask.url_for('createaccount'), code=302)
+    #return flask.redirect(flask.url_for('createaccount'), code=302)
+    return flask.render_template('home.html')
 
 @app.route('/accountcreated/', methods=['POST'])
 def accountcreated():

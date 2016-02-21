@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Home</title>
+	<link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css" />
+	<link href="{{ url_for('static', filename='favicon.ico') }}" rel="shortcut icon" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script>
+    $(function() {
+        $('a[href*="#"]:not([href="#"])').click(function() {
+          if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+            var target = $(this.hash);
+            target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+            if (target.length) {
+              $('html, body').animate({
+                scrollTop: target.offset().top
+              }, 1000);
+              return false;
+            }
+          }
+        });
+      });
+    </script>
+    
+    <script language="javascript" type="text/javascript">
+
+        $(document).ready(function () {
+             GetLatestReleaseInfo();  
+        });  
+        
+        function bytesToSize(bytes) {
+           var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+           if (bytes == 0) return '0 Byte';
+           var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+           return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+        };
+        
+        function GetLatestReleaseInfo() {
+           $.getJSON("https://api.github.com/repos/Lightning3105/Legend-Of-Aiopa-RPG/releases").done(function (json) {
+                var release = json[0];
+                var assetURL = release.assets_url;
+                var version = release.tag_name;
+                $.getJSON(assetURL).done(function (json2) {
+                    var asset = json2[0];
+                    var downloadURL = asset.browser_download_url;
+                    var downloadSize = bytesToSize(asset.size);
+                    $("#latest-download").attr("href", downloadURL);
+                    document.getElementById("latest-download-size").innerHTML = downloadSize;
+                })
+                document.getElementById("latest-download-version").innerHTML = version;
+           });
+           
+           $.getJSON("https://api.github.com/repos/Lightning3105/Legend-Of-Aiopa-RPG/tags").done(function (json) {
+                var release = json[0];
+                var downloadURL = release.zipball_url;
+                var version = release.name;
+                document.getElementById("source-download-version").innerHTML = version;
+                $("#source-download").attr("href", downloadURL);
+
+           });    
+        }  
+    </script>
+
+</head>
+<body>
+<ul>
+	<li><a class="active" href="{{url_for('root')}}">Home</a></li>
+	<li><a href="{{url_for('server')}}">Accounts</a></li>
+	<li><a href="{{url_for('leaderboard')}}">Leaderboard</a></li>
+	<ul style="float: right; list-style-type: none;">
+		<li><a href="{{url_for('createaccount')}}">Create Account</a></li>
+		<li><a href="#login">Login</a></li>
+	</ul>
+</ul>
+
+<p>&nbsp;</p>
+
+<h1 style="text-align: center; font-size: 500%;"><strong>Legend of</strong></h1>
+
+<p>&nbsp;</p>
+
+<h1 style="text-align: center; font-size: 500%;"><strong>Aiopa</strong></h1>
+
+<p>&nbsp;</p>
+
+<p style="text-align: center;"><a href="#download"><button class="blubut" onclick="setVisibility('hide1')">Download</button></a></p>
+
+<div>&nbsp;</div>
+
+<p style="text-align: center;"><a href="{{url_for('createaccount')}}"><button class="blubut">Create Account</button></a></p>
+
+<div>&nbsp;</div>
+
+<div>&nbsp;</div>
+
+<div>&nbsp;</div>
+
+<div>&nbsp;</div>
+
+<div>&nbsp;</div>
+
+<div id="hide1" style="display: none;">
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <h2 id="download" style="text-align: center; font-size: 300%; color: #FFFFFF"><strong>Downloads</strong></h2>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <div class="dlbutton">
+      <a href="#" id="latest-download">Download Latest</a>
+      <p class="top dlb" id="latest-download-version">click to begin</p>
+      <p class="bottom dlb" id="latest-download-size">1.2MB .zip</p>
+    </div>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <div class="dlbutton">
+      <a href="#" id="source-download">Download Source</a>
+      <p class="top dlb" id="source-download-version">click to begin</p>
+      <p class="bottom dlb" id="source-download-size">Click to download</p>
+    </div>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    
+</div>
+
+<script language="JavaScript">
+function setVisibility(id) {
+    document.getElementById(id).style.display = 'inline';
+}
+
+function scroll(id) {
+    document.getElementById(id).scrollIntoView();
+}
+</script>
+
+
+</body>
+</html>
