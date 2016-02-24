@@ -5,6 +5,7 @@
     <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css" />
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 </head>
+
 <body onload="setActive()">
 
 <ul id="navbar">
@@ -38,21 +39,29 @@ function setActive() {
 
 <br/>
 
+<p> This is a table containing the average time used by the functions within the game </p>
+
+<div id="table-wrapper">
+<div id="table-scroll">
+
 <table align="center">
     <tr>
-        <th>Rank</th>
-        <th>User</th>
-        <th>XP</th>
+        <th>File</th>
+        <th>Position</th>
+        <th>Function</th>
+        <th>Time</th>
     </tr>
 {% for key in korder %}
     <tr>
-        <td width="10%"> {{num}} </td>
-        <td> {{ key }} </td>
-        <td width="20%"> {{ tout[key] }} </td>
+        <td > {{key[0]}} </td>
+        <td> {{key[1]}} </td>
+        <td> {{key[2]}} </td>
+        <td > {{ tout[key] }} </td>
     </tr>
-    {% set num = num + 1 %}
 {% endfor %}
 </table>
 
+</div>
+</div>
 </body>
 </html>

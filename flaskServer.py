@@ -7,6 +7,7 @@ import hashlib
 
 app = Flask(__name__)
 accdab = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, "data/accounts.dab"))
+statdab = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, "data/stats.dab"))
 
 def startServer():
     app.debug = True
@@ -59,6 +60,25 @@ def checkDatabase():
         with open(accdab, 'wb') as f: 
             pickle.dump({}, f)
     print("POST CHECK DATABASE")
+    
+    #Statistics Database
+    print("CHECK STATS")
+    try:
+        f = open(statdab, 'rb')
+    except FileNotFoundError:
+        print("FILE NOT FOUND")
+        f = open(statdab, 'wb')
+        f.close()
+    try:
+        with open(statdab, 'rb') as f: 
+            pickle.load(f)
+    except EOFError as e:
+        print("EOFERROR")
+        print(e)
+        f.close()
+        with open(statdab, 'wb') as f: 
+            pickle.dump({"calltimes": [], "crashes": []}, f)
+    print("POST CHECK STATS")
 
 @app.route('/accounts/')
 def server():
@@ -103,6 +123,26 @@ def leaderboard():
     order = sorted(table, key=table.__getitem__, reverse=True)
     return flask.render_template('leaderboard.html', tout=table, korder=order, num=1)
 
+@app.route('/calltimes/')
+def calltimes():
+    from collections import Counter
+    checkDatabase()
+    with open(statdab, "rb") as sf:
+        stats = pickle.load(sf)
+        stats = stats["calltimes"]
+        total = Counter({})
+        for s in stats:
+            a = Counter(s)
+            total = total + a
+        #total = dict(total)
+        for k, v in total.items():
+            total[k] = v / len(stats)
+            total[k] = round(total[k], 4)
+        print(total)
+    
+    order = sorted(total, key=total.__getitem__, reverse=True)
+    return flask.render_template('calltimes.html', korder=order, tout=total)
+
 
 @app.route('/senddata/', methods=['GET', 'POST'])
 def getter():
@@ -112,6 +152,21 @@ def getter():
     data = json.loads(data)
     data = literal_eval(data)
     checkDatabase()
+    #Statistics and crashes
+    try:
+        if 'calltimes' in data.keys():
+            ct = data["calltimes"]
+            with open(statdab, 'rb') as acc:
+                sdict = pickle.load(acc)
+                print(sdict)
+            with open(statdab, 'wb') as acc:
+                sdict["calltimes"].append(ct)
+                pickle.dump(sdict, acc)
+    except Exception as e:
+        print("SEND DATA EXCEPTION", e)
+        
+    
+    #userdata
     try:
         un = data['username']
         pw = data['password']
