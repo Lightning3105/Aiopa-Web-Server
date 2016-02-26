@@ -42,15 +42,12 @@ def createaccount():
         else:
             return flask.redirect(flask.url_for('accountcreated'), code=307)
 
-@app.route("/env")
-def environ():
-    import os
-    print(os.environ)
-    return os.environ
-
 @app.route("/ip")
 def clientip():
-    return flask.request.environ.get('HTTP_X_REAL_IP', flask.request.remote_addr)
+    import os
+    openip = os.environ("HTTP_X_CLIENT_IP") 
+    flaskip = flask.request.environ.get('HTTP_X_REAL_IP', flask.request.remote_addr)
+    return "OPEN IP:\n" + openip + "\nFLASK IP:\n" + flaskip
 
 
 def checkDatabase():
