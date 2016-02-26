@@ -50,6 +50,7 @@ def clientip():
         flaskip = flask.request.environ.get('HTTP_X_REAL_IP', flask.request.remote_addr)
         return "OPEN IP:\n" + openip + "\nFLASK IP:\n" + flaskip
     except Exception as e:
+        print(e)
         return e
 
 
