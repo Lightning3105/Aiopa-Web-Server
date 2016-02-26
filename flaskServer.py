@@ -42,17 +42,6 @@ def createaccount():
         else:
             return flask.redirect(flask.url_for('accountcreated'), code=307)
 
-@app.route("/ip")
-def clientip():
-    try:
-        
-        return flask.request.environ.get('HTTP_X_REAL_IP', flask.request.remote_addr) + "   " + flask.request.remote_addr + "   " + flask.request.environ['REMOTE_ADDR']
-    except Exception as e:
-        print("ERROR:")
-        print(e)
-        return e
-
-
 def checkDatabase():
     print("CHECK DATABASE")
     try:
@@ -204,6 +193,8 @@ def root():
 def accountcreated():
     username=flask.request.form['username']
     password=flask.request.form['password']
+    with open(os.path.join(os.path.dirname(__file__), "env.txt"), "w") as env:
+        ip = env.read()
     with open(accdab, 'rb') as acc:
         adict = pickle.load(acc)
     with open(accdab, 'wb') as acc:
@@ -211,6 +202,7 @@ def accountcreated():
         hash_object = hashlib.md5(password.encode())
         hash_object = hash_object.hexdigest()
         adict[username]["password"] = hash_object
+        adict[username]["ip"] = ip
         pickle.dump(adict, acc)
         print(adict)
     return flask.render_template('form_action.html', username=username, password=password)
