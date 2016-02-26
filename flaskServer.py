@@ -42,6 +42,12 @@ def createaccount():
         else:
             return flask.redirect(flask.url_for('accountcreated'), code=307)
 
+@app.route("/env")
+def environ():
+    import os
+    return os.environ['OPENSHIFT_ENV_VAR']
+
+
 def checkDatabase():
     print("CHECK DATABASE")
     try:
