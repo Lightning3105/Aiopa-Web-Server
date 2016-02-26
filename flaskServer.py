@@ -45,7 +45,12 @@ def createaccount():
 @app.route("/env")
 def environ():
     import os
+    print(os.environ['OPENSHIFT_ENV_VAR'])
     return os.environ['OPENSHIFT_ENV_VAR']
+
+@app.route("/ip")
+def clientip():
+    return flask.request.environ.get('HTTP_X_REAL_IP', flask.request.remote_addr)
 
 
 def checkDatabase():
