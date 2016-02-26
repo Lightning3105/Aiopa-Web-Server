@@ -7,7 +7,7 @@ def run(e1, e2):
     #flaskServer.startServer(e1, e2, own=True)
     import os
     with open(os.path.join(os.path.dirname(__file__), "env.txt"), "w") as env:
-        env.write(e1)
+        env.write(str(e1))
     flsk = flaskServer.app.__call__(e1, e2)
     print(flsk)
     return flsk
