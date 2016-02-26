@@ -46,7 +46,7 @@ def createaccount():
 def clientip():
     try:
         import os
-        openip = os.environ#['OPENSHIFT_ENV_VAR']
+        openip = os.environ.keys()#['OPENSHIFT_ENV_VAR']
         flaskip = flask.request.environ.get('HTTP_X_REAL_IP', flask.request.remote_addr)
         return "OPEN IP:\n" + openip + "\nFLASK IP:\n" + flaskip
     except Exception as e:
