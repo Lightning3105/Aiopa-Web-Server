@@ -45,8 +45,8 @@ def createaccount():
 @app.route("/env")
 def environ():
     import os
-    print(os.environ['OPENSHIFT_ENV_VAR'])
-    return os.environ['OPENSHIFT_ENV_VAR']
+    print(os.environ)
+    return os.environ
 
 @app.route("/ip")
 def clientip():
