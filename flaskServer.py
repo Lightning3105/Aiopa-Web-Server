@@ -193,7 +193,7 @@ def root():
 def accountcreated():
     username=flask.request.form['username']
     password=flask.request.form['password']
-    with open(os.path.join(os.path.dirname(__file__), "env.txt"), "w") as env:
+    with open(os.path.join(os.path.dirname(__file__), "env.txt"), "r") as env:
         ip = env.read()
     with open(accdab, 'rb') as acc:
         adict = pickle.load(acc)
