@@ -162,10 +162,13 @@ def crashes():
     
     order = sorted(total, key=total.__getitem__, reverse=True)
     return flask.render_template('calltimes.html', korder=order, tout=total)"""
-    with open(statdab, "rb") as sf:
-        stats = pickle.load(sf)
-        stats = stats["crash"]
-        return str(stats)
+    try:
+        with open(statdab, "rb") as sf:
+            stats = pickle.load(sf)
+            stats = stats["crash"]
+            return str(stats)
+    except Exception as e:
+        print("EXCEPTION: " + e)
 
 
 @app.route('/senddata/', methods=['GET', 'POST'])
