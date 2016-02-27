@@ -165,7 +165,7 @@ def crashes():
     try:
         with open(statdab, "rb") as sf:
             stats = pickle.load(sf)
-            stats = stats["crash"]
+            stats = stats["crashes"]
             return str(stats)
     except Exception as e:
         print("EXCEPTION: " + e)
@@ -190,7 +190,7 @@ def getter():
                 sdict["calltimes"].append(ct)
                 pickle.dump(sdict, acc)
         if 'crash' in data.keys():
-            ct = data["crashes"]
+            ct = data["crash"]
             with open(statdab, 'rb') as acc:
                 sdict = pickle.load(acc)
                 print(sdict)
