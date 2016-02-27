@@ -228,6 +228,7 @@ def multiplayer(server):
     if "start" in data.keys():
         with open(file, 'wb') as svr: 
             pickle.dump({}, svr)
+        return "START"
     try:
         un = data['username']
         del data['username']
