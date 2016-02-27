@@ -162,6 +162,14 @@ def getter():
             with open(statdab, 'wb') as acc:
                 sdict["calltimes"].append(ct)
                 pickle.dump(sdict, acc)
+        if 'crash' in data.keys():
+            ct = data["crashes"]
+            with open(statdab, 'rb') as acc:
+                sdict = pickle.load(acc)
+                print(sdict)
+            with open(statdab, 'wb') as acc:
+                sdict["crashes"].append(ct)
+                pickle.dump(sdict, acc)
     except Exception as e:
         print("SEND DATA EXCEPTION", e)
         
