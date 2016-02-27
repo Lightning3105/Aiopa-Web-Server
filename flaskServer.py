@@ -174,14 +174,11 @@ def crashes():
 @app.route('/senddata/', methods=['GET', 'POST'])
 def getter():
     from ast import literal_eval
-    try:
-        data = flask.request.data
-        data = data.decode("utf-8")
-        data = json.loads(data)
-        data = literal_eval(data)
-        checkDatabase()
-    except Exception as e:
-        print("GETTER EXCEPTION: " + e)
+    data = flask.request.data
+    data = data.decode("utf-8")
+    data = json.loads(data)
+    data = literal_eval(data)
+    checkDatabase()
     #Statistics and crashes
     try:
         if 'calltimes' in data.keys():
@@ -201,7 +198,7 @@ def getter():
                 sdict["crashes"].append(ct)
                 pickle.dump(sdict, acc)
     except Exception as e:
-        print("SEND DATA EXCEPTION", e)
+        print("SEND DATA EXCEPTION", str(e))
         
     
     #userdata
