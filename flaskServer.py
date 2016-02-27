@@ -207,6 +207,47 @@ def accountcreated():
         print(adict)
     return flask.render_template('form_action.html', username=username, password=password)
 
+@app.route("/multiplayer/<server>", methods=['GET','POST'])
+def multiplayer(server):
+    file = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, "data/servers/" + server + ".dab"))
+    if not os.path.exists(file):
+        with open(file, "wb") as svr:
+            pickle.dump({}, svr)
+    try:
+        with open(file, 'rb') as svr: 
+            pickle.load(svr)
+    except EOFError as e:
+        with open(file, 'wb') as svr: 
+            pickle.dump({}, svr)
+            
+    from ast import literal_eval
+    data = flask.request.data
+    data = data.decode("utf-8")
+    data = json.loads(data)
+    data = literal_eval(data)
+    if "start" in data.keys():
+        with open(file, 'wb') as svr: 
+            pickle.dump({}, svr)
+    try:
+        un = data['username']
+        del data['username']
+        with open(file, 'rb') as svr:
+            sdict = pickle.load(svr)
+        with open(file, 'wb') as svr:
+            if not "players" in sdict.keys():
+                sdict["players"] = {}
+            if not un in sdict.keys():
+                sdict["players"][un] = {}
+            sdict["players"][un].update(data)
+            pickle.dump(sdict, svr)
+    except Exception as e:
+        print(e)
+    
+    return str(sdict)
+
+        
+    
+
 if __name__ == "__main__":
     accdab = os.path.join(os.path.dirname(__file__),'accounts.dab')
     startServer()
