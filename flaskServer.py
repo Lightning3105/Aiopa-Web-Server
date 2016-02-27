@@ -129,7 +129,7 @@ def calltimes():
     checkDatabase()
     with open(statdab, "rb") as sf:
         stats = pickle.load(sf)
-        stats = stats["calltimes"]
+        stats = stats["crash"]
         total = Counter({})
         for s in stats:
             a = Counter(s)
@@ -141,7 +141,31 @@ def calltimes():
         print(total)
     
     order = sorted(total, key=total.__getitem__, reverse=True)
-    return flask.render_template('calltimes.html', korder=order, tout=total)
+    return flask.render_template('crashes.html', crashes=crashes)
+
+@app.route('/crashes/')
+def crashes():
+    """from collections import Counter
+    checkDatabase()
+    with open(statdab, "rb") as sf:
+        stats = pickle.load(sf)
+        stats = stats["crash"]
+        total = Counter({})
+        for s in stats:
+            a = Counter(s)
+            total = total + a
+        #total = dict(total)
+        for k, v in total.items():
+            total[k] = v / len(stats)
+            total[k] = round(total[k], 4)
+        print(total)
+    
+    order = sorted(total, key=total.__getitem__, reverse=True)
+    return flask.render_template('calltimes.html', korder=order, tout=total)"""
+    with open(statdab, "rb") as sf:
+        stats = pickle.load(sf)
+        stats = stats["crash"]
+        return str(stats)
 
 
 @app.route('/senddata/', methods=['GET', 'POST'])
