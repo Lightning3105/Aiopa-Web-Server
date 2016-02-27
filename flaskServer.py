@@ -174,11 +174,14 @@ def crashes():
 @app.route('/senddata/', methods=['GET', 'POST'])
 def getter():
     from ast import literal_eval
-    data = flask.request.data
-    data = data.decode("utf-8")
-    data = json.loads(data)
-    data = literal_eval(data)
-    checkDatabase()
+    try:
+        data = flask.request.data
+        data = data.decode("utf-8")
+        data = json.loads(data)
+        data = literal_eval(data)
+        checkDatabase()
+    except Exception as e:
+        print("GETTER EXCEPTION: " + e)
     #Statistics and crashes
     try:
         if 'calltimes' in data.keys():
