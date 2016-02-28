@@ -261,9 +261,15 @@ def multiplayer(server):
     data = json.loads(data)
     data = literal_eval(data)
     if "start" in data.keys():
-        with open(file, 'wb') as svr: 
-            pickle.dump({}, svr)
-        return "START"
+        try:
+            ad = data["admin"]
+            pw = data["password"]
+            with open(file, 'wb') as svr: 
+                pickle.dump({"admin": ad, "password": pw}, svr)
+            return "START"
+        except Exception as e:
+            print("EXCEPTION: " + str(e))
+            return("EXCEPTION: " + str(e))
     try:
         un = data['username']
         del data['username']
