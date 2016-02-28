@@ -129,7 +129,7 @@ def calltimes():
     checkDatabase()
     with open(statdab, "rb") as sf:
         stats = pickle.load(sf)
-        stats = stats["crash"]
+        stats = stats["calltimes"]
         total = Counter({})
         for s in stats:
             a = Counter(s)
@@ -141,7 +141,7 @@ def calltimes():
         print(total)
     
     order = sorted(total, key=total.__getitem__, reverse=True)
-    return flask.render_template('crashes.html', crashes=crashes)
+    return flask.render_template('calltimes.html', crashes=crashes)
 
 @app.route('/crashes/')
 def crashes():
