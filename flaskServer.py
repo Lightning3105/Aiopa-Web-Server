@@ -141,7 +141,7 @@ def calltimes():
         print(total)
     
     order = sorted(total, key=total.__getitem__, reverse=True)
-    return flask.render_template('calltimes.html', crashes=crashes)
+    return flask.render_template('calltimes.html', korder=order, tout=total)
 
 @app.route('/crashes/')
 def crashes():
