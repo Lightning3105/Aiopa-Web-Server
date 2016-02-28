@@ -269,6 +269,8 @@ def multiplayer(server):
             return "START"
         except Exception as e:
             print("EXCEPTION: " + str(e))
+            with open(file, 'wb') as svr: 
+                pickle.dump({}, svr)
             return("EXCEPTION: " + str(e))
     try:
         un = data['username']
