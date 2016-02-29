@@ -216,9 +216,11 @@ li a, .dropbtn {
     z-index: 100;
 }
 
-li a:hover:not(.active), .dropdown:hover .dropbtn {
+li a:hover:not(.active), .dropdown:hover .dropbtn{
     background-color: #111;
     z-index: 100;
+}
+-index: 100;
 }
 
 li.dropdown {
@@ -245,7 +247,7 @@ li.dropdown {
 }
 
 .dropdown-content a:hover {
-    background-color: #f1f1f1;
+    background-color: #ccffff;
     z-index: 100;
 }
 

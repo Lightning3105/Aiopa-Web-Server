@@ -45,18 +45,12 @@ function setActive() {
 
 <p>&nbsp;</p>
 
-<h1 style="text-align: center; font-size: 500%;"><strong>Create </strong></h1>
-
-<p>&nbsp;</p>
-
-<h1 style="text-align: center; font-size: 500%;"><strong>New User</strong></h1>
-
-<p>&nbsp;</p>
+<h1 style="text-align: center; font-size: 500%;"><strong>Login</strong></h1>
 
 <div id="content">
-<form action="{{ url_for('createaccount') }}" method="post">
-<p style="text-align: center;"><label for="username">Please enter a username:</label><label for="username"><font color="red">{{unerror}}</font></label> <input name="username" type="text" value="{{uname}}"/><br />
-<label for="password">Please enter a password:</label> <label for="username"><font color="red">{{pwerror}}</font></label> <input name="password" type="password" /><br />
+<form action="{{ url_for('login') }}" method="post">
+<p style="text-align: center;"><label for="username">Please enter your username:</label><label for="username"><font color="red">{{unerror}}</font></label> <input name="username" type="text" value="{{uname}}"/><br />
+<label for="password">Please enter your password:</label> <label for="username"><font color="red">{{pwerror}}</font></label> <input name="password" type="password" /><br />
 <br />
 <input type="submit" value="Submit" />&nbsp;</p>
 </form>

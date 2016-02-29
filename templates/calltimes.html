@@ -19,22 +19,29 @@
       <a href="{{url_for('server')}}">Accounts</a>
     </div></li>
   <ul style="float:right;list-style-type:none;">
+    <li><a href="{{url_for('login')}}">Login</a></li>
     <li><a href="{{url_for('createaccount')}}">Create Account</a></li>
-    <li><a href="#login">Login</a></li>
   </ul>
 </ul>
-
 <script>
-
 function setActive() {
   aObj = document.getElementById('navbar').getElementsByTagName('a');
   for(i=0;i<aObj.length;i++) {
     if(document.location.href == aObj[i].href) {
       aObj[i].className='active';
     }
+    console.log("{{user}}");
+    if(aObj[i].innerHTML == "Login") {
+      if("{{user}}" != "") {
+        aObj[i].parentElement.className = "dropdown";
+        aObj[i].parentElement.innerHTML = '<a href="#" class="dropbtn">{{user}}</a> \
+                                            <div class="dropdown-content"> \
+                                              <a href="{{url_for('logout')}}">Logout</a> \
+                                            </div></li>'
+      }
+    }
   }
 }
-
 </script>
 
 <br/>

@@ -8,6 +8,7 @@ import hashlib
 app = Flask(__name__)
 accdab = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, "data/accounts.dab"))
 statdab = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, "data/stats.dab"))
+app.secret_key = "J\x92\x1f\x98\xbd\xf2}>\xf3\x85\x06\x9e\xc2\x99h\x99\xb5\xf9\xab\xb5\x85\xe9\x8d\x96"
 
 def startServer():
     app.debug = True
@@ -41,6 +42,46 @@ def createaccount():
             return flask.render_template('form_submit.html', unerror=unerr, pwerror=pwerr, uname=username)
         else:
             return flask.redirect(flask.url_for('accountcreated'), code=307)
+
+@app.route('/login/', methods=['GET', 'POST'])
+def login():
+    if flask.request.method == 'GET':
+        print("GET")
+        return flask.render_template('form_login.html')
+    if flask.request.method == 'POST':
+        print("POST")
+        username=flask.request.form['username']
+        password=flask.request.form['password']
+        redo = False
+        unerr = ""
+        pwerr = ""
+        checkDatabase()
+        accfile = open(accdab, 'rb')
+        acc = pickle.load(accfile)
+        print(acc)
+        if username in acc.keys():
+            password = hashlib.md5(password.encode())
+            password = password.hexdigest()
+            if password == acc[str(username)]["password"]:
+                flask.session["username"] = username
+            else:
+                print(password, acc[str(username)]["password"])
+                pwerr = "Incorrect password"
+                redo = True
+        else:
+            unerr = "That username doesn't exist"
+            redo = True
+        if redo:
+            return flask.render_template('form_login.html', unerror=unerr, pwerror=pwerr, uname=username)
+        else:
+            return flask.redirect(flask.url_for('root'), code=302)
+
+@app.route('/logout')
+def logout():
+    # remove the username from the session if it's there
+    flask.session["username"] = ""
+    return flask.redirect(flask.url_for('root'))
+
 
 def checkDatabase():
     print("CHECK DATABASE")
@@ -221,9 +262,11 @@ def getter():
 
 @app.route('/')
 def root():
-    #return flask.redirect(flask.url_for('createaccount'), code=302)
     return flask.render_template('home.html')
 
+@app.context_processor
+def inject_user():
+    return dict(user=flask.session["username"])
 @app.route('/accountcreated/', methods=['POST'])
 def accountcreated():
     username=flask.request.form['username']
@@ -240,6 +283,7 @@ def accountcreated():
         adict[username]["ip"] = ip
         pickle.dump(adict, acc)
         print(adict)
+    flask.session["username"] = username
     return flask.render_template('form_action.html', username=username, password=password)
 
 @app.route("/multiplayer/<server>", methods=['GET','POST'])
