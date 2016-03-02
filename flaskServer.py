@@ -8,6 +8,8 @@ import hashlib
 app = Flask(__name__)
 accdab = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, "data/accounts.dab"))
 statdab = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, "data/stats.dab"))
+serverdab = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, "data/servers/"))
+
 app.secret_key = "J\x92\x1f\x98\xbd\xf2}>\xf3\x85\x06\x9e\xc2\x99h\x99\xb5\xf9\xab\xb5\x85\xe9\x8d\x96"
 
 def startServer():
@@ -27,8 +29,8 @@ def createaccount():
         unerr = ""
         pwerr = ""
         checkDatabase()
-        accfile = open(accdab, 'rb')
-        acc = pickle.load(accfile)
+        with open(accdab, 'rb') as accfile:
+            acc = pickle.load(accfile)
         print(acc)
         if username in acc.keys():
             username = ""
@@ -120,6 +122,34 @@ def checkDatabase():
         with open(statdab, 'wb') as f: 
             pickle.dump({"calltimes": [], "crashes": []}, f)
     print("POST CHECK STATS")
+
+def checkServers():
+    with open(accdab, "rb") as acc:
+        accounts = pickle.load(acc)
+        for name, value in accounts.items():
+            if "servers" in value.keys():
+                for sv in value["servers"]:
+                    file = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, "data/servers/" + sv["name"] + ".dab"))
+                    if not os.path.exists(file):
+                        with open(file, "wb") as svr:
+                            pickle.dump({}, svr)
+                    try:
+                        with open(file, 'rb') as svr: 
+                            pickle.load(svr)
+                    except EOFError as e:
+                        with open(file, 'wb') as svr: 
+                            pickle.dump({}, svr)
+                    with open(file, "rb") as svr:
+                        dab = pickle.load(svr)
+                    print(dab, sv)
+                    dab["name"] = sv["name"]
+                    dab["password"] = sv["password"]
+                    dab["admin"] = sv["admin"]
+                    print(dab)
+                    with open(file, "wb") as sv:
+                        pickle.dump(dab, sv)
+                            
+
 
 @app.route('/accounts/')
 def server():
@@ -287,35 +317,14 @@ def accountcreated():
     return flask.render_template('form_action.html', username=username, password=password)
 
 @app.route("/multiplayer/<server>", methods=['GET','POST'])
-def multiplayer(server):
+def multiplayer(server): #TODO: Logging off of clients
     file = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, "data/servers/" + server + ".dab"))
-    if not os.path.exists(file):
-        with open(file, "wb") as svr:
-            pickle.dump({}, svr)
-    try:
-        with open(file, 'rb') as svr: 
-            pickle.load(svr)
-    except EOFError as e:
-        with open(file, 'wb') as svr: 
-            pickle.dump({}, svr)
-            
+    checkServers()        
     from ast import literal_eval
     data = flask.request.data
     data = data.decode("utf-8")
     data = json.loads(data)
     data = literal_eval(data)
-    if "start" in data.keys():
-        try:
-            ad = data["admin"]
-            pw = data["password"]
-            with open(file, 'wb') as svr: 
-                pickle.dump({"admin": ad, "password": pw}, svr)
-            return "START"
-        except Exception as e:
-            print("EXCEPTION: " + str(e))
-            with open(file, 'wb') as svr: 
-                pickle.dump({}, svr)
-            return("EXCEPTION: " + str(e))
     try:
         un = data['username']
         del data['username']
@@ -333,9 +342,62 @@ def multiplayer(server):
     
     return str(sdict)
 
-        
+@app.route("/manageservers", methods=['GET','POST'])       
+def manageservers(req="POST"):
+    if flask.request.method == 'GET':
+        req = "GET"
+    if flask.session["username"] == "":
+        return flask.redirect(flask.url_for('login'))
+    checkDatabase()
+    servers = []
+    with open(accdab, 'rb') as acc:
+        accounts = pickle.load(acc)
+        for name, value in accounts.items():
+            if name == flask.session["username"]:
+                if "servers" in value.keys():
+                    servers = value["servers"]
+    if req == 'GET':
+        print("GET")
+        return flask.render_template('manage_servers.html', servers=servers)
     
-
+    if req == 'POST':
+        print("POST")
+        name=flask.request.form['name']
+        oldName = name
+        password=flask.request.form['password']
+        redo = False
+        unerr = ""
+        pwerr = ""
+        checkDatabase()
+        with open(accdab, 'rb') as accfile:
+            acc = pickle.load(accfile)
+        for value in acc.values():
+            print(value)
+            if "servers" in value.keys():
+                for svr in value["servers"]:
+                    if svr["name"] == name:
+                        name = ""
+        if " " in list(name):
+            name = ""
+        if name == "":
+            unerr = "Server name is invalid or already exists"
+            redo = True
+        if password == "":
+            pwerr = "Password is too short"
+            redo = True
+        if redo:
+            print("redo")
+            return flask.render_template('manage_servers.html', unerror=unerr, pwerror=pwerr, uname=oldName, servers=servers)
+        else:
+            print("SERVER:", {"name": name, "password": password})
+            if not "servers" in acc[flask.session["username"]]:
+                acc[flask.session["username"]]["servers"] = []
+            acc[flask.session["username"]]["servers"].append({"name": name, "password": password, "admin": flask.session["username"]})
+            with open(accdab, 'wb') as accfile:
+                pickle.dump(acc, accfile)
+            print("RE MANAGE")
+            return manageservers("GET")
+        
 if __name__ == "__main__":
     accdab = os.path.join(os.path.dirname(__file__),'accounts.dab')
     startServer()

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Manage Servers</title>
+	<link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css" />
+	<link href="{{ url_for('static', filename='favicon.ico') }}" rel="shortcut icon" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script>
+    $(function() {
+        $('a[href*="#"]:not([href="#"])').click(function() {
+          if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+            console.log(this.hash);
+            var target = $(this.hash);
+            target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+            if (target.length) {
+              $('html, body').animate({
+                scrollTop: target.offset().top
+              }, 1000);
+              return false;
+            }
+          }
+        });
+      });
+    </script>
+
+</head>
+<body onload="setActive()">
+
+<ul id="navbar">
+  <li><a href="{{url_for('root')}}">Home</a></li>
+  <li><a href="{{url_for('leaderboard')}}">Leaderboard</a></li>
+  <li><a href="{{url_for('manageservers')}}">Manage Servers</a></li>
+  <li class="dropdown">
+    <a href="#" class="dropbtn">Developer Tools</a>
+    <div class="dropdown-content">
+      <a href="{{url_for('calltimes')}}">Function Calltimes</a>
+      <a href="{{url_for('calltimes')}}">Crash Reports</a>
+      <a href="{{url_for('server')}}">Accounts</a>
+    </div></li>
+  <ul style="float:right;list-style-type:none;">
+    <li><a href="{{url_for('login')}}">Login</a></li>
+    <li><a href="{{url_for('createaccount')}}">Create Account</a></li>
+  </ul>
+</ul>
+<script>
+function setActive() {
+  aObj = document.getElementById('navbar').getElementsByTagName('a');
+  for(i=0;i<aObj.length;i++) {
+    if(document.location.href == aObj[i].href) {
+      aObj[i].className='active';
+    }
+    console.log("{{user}}");
+    if(aObj[i].innerHTML == "Login") {
+      if("{{user}}" != "") {
+        aObj[i].parentElement.className = "dropdown";
+        aObj[i].parentElement.innerHTML = '<a href="#" class="dropbtn">{{user}}</a> \
+                                            <div class="dropdown-content"> \
+                                              <a href="{{url_for('logout')}}">Logout</a> \
+                                            </div></li>'
+      }
+    }
+  }
+}
+</script>
+
+{% for server in servers %}
+<div class="server">
+  <p>A server</p>
+  <p>{{server}}<p>
+</div>
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+{% endfor %}
+
+<p style="text-align: center;"><a href="#create"><button class="blubut" onclick="setVisibility('hide1')">Create New Server</button></a></p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<div id="hide1" style="display: none;">
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <h2 id="create" style="text-align: center; font-size: 300%; color: #FFFFFF"><strong>Create New Server</strong></h2>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <div id="content">
+        <form action="{{ url_for('manageservers') }}" method="post">
+            <p style="text-align: center;">
+            <label for="name">Enter the server name:</label>
+            <label for="name"><font color="red">{{unerror}}</font></label>
+            <input name="name" type="text" value="{{uname}}"/>
+            <br />
+            <label for="password">Please enter a password:</label> 
+            <input name="password" type="password" />
+            <br />
+            <br />
+            <input type="submit" value="Submit" />&nbsp;</p>
+        </form>
+    </div>
+</div>
+
+<script language="JavaScript">
+function setVisibility(id) {
+    document.getElementById(id).style.display = 'inline';
+}
+
+function scroll(id) {
+    document.getElementById(id).scrollIntoView();
+}
+
+document.body.onload = function checkEntered(){
+    if("{{unerror}}" != "") {
+    console.log("{{unerror}}");
+        setVisibility('hide1')
+        var target = $('#create');
+        target = target.length ? target : $('[name=' + '#create'.slice(1) +']');
+        if (target.length) {
+          $('html, body').animate({
+            scrollTop: target.offset().top
+          }, 1000);
+          return false;
+    }
+}
+}
+</script>
+</body>
+</html>
