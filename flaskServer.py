@@ -4,6 +4,7 @@ import pickle
 import os
 import json
 import hashlib
+import time
 
 app = Flask(__name__)
 accdab = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, "data/accounts.dab"))
@@ -141,6 +142,8 @@ def checkServers():
                             pickle.dump({}, svr)
                     with open(file, "rb") as svr:
                         dab = pickle.load(svr)
+                        if not "players" in dab.keys():
+                            dab["players"] = {}
                     print(dab, sv)
                     dab["name"] = sv["name"]
                     dab["password"] = sv["password"]
@@ -299,6 +302,7 @@ def inject_user():
     if not "username" in flask.session:
         flask.session["username"] = ""
     return dict(user=flask.session["username"])
+
 @app.route('/accountcreated/', methods=['POST'])
 def accountcreated():
     username=flask.request.form['username']
@@ -320,29 +324,62 @@ def accountcreated():
 
 @app.route("/multiplayer/<server>", methods=['GET','POST'])
 def multiplayer(server): #TODO: Logging off of clients
+    print("SERVER:", server)
     file = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, "data/servers/" + server + ".dab"))
-    checkServers()        
-    from ast import literal_eval
-    data = flask.request.data
-    data = data.decode("utf-8")
-    data = json.loads(data)
-    data = literal_eval(data)
-    try:
-        un = data['username']
-        del data['username']
+    checkServers()
+    if flask.request.method == "GET":
         with open(file, 'rb') as svr:
             sdict = pickle.load(svr)
-        with open(file, 'wb') as svr:
-            if not "players" in sdict.keys():
-                sdict["players"] = {}
-            if not un in sdict.keys():
-                sdict["players"][un] = {}
-            sdict["players"][un].update(data)
-            pickle.dump(sdict, svr)
-    except Exception as e:
-        print(e)
+        return str(sdict)
     
-    return str(sdict)
+    
+    if flask.request.method == "POST":
+        from ast import literal_eval
+        data = flask.request.data
+        data = data.decode("utf-8")
+        print("DATA:", data)
+        data = json.loads(data)
+        data = literal_eval(data)
+        
+        if "connect" in data.keys():
+            un = data['username']
+            del data['username']
+            del data["connect"]
+            with open(file, 'rb') as svr:
+                sdict = pickle.load(svr)
+            with open(file, 'wb') as svr:
+                if not un in sdict.keys():
+                    sdict["players"][un] = {}
+                sdict["players"][un].update(data)
+                sdict["players"][un]["last call"] = time.time()
+                sdict["players"][un]["online"] = True
+                sdict["players"][un]["online"] = None
+                pickle.dump(sdict, svr)
+        try:
+            un = data['username']
+            del data['username']
+            with open(file, 'rb') as svr:
+                sdict = pickle.load(svr)
+            with open(file, 'wb') as svr:
+                sdict["players"][un].update(data)
+                sdict["players"][un]["last call"] = time.time()
+                sdict["players"][un]["online"] = True
+                pickle.dump(sdict, svr)
+        except Exception as e:
+            print(e)
+        
+        try:
+            with open(file, "rb") as svr:
+                sdict = pickle.load(svr)
+            for player, value in sdict["players"].items():
+                if time.time() - value["last call"] > 5:
+                    sdict["players"][player]["online"] = False
+            with open(file, "wb") as svr:
+                pickle.dump(sdict, svr)
+        except Exception as e:
+            print(e)
+        
+        return str(sdict)
 
 @app.route("/manageservers", methods=['GET','POST'])       
 def manageservers(req="POST"):
