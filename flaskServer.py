@@ -296,6 +296,8 @@ def root():
 
 @app.context_processor
 def inject_user():
+    if not "username" in flask.session:
+        flask.session["username"] = ""
     return dict(user=flask.session["username"])
 @app.route('/accountcreated/', methods=['POST'])
 def accountcreated():
