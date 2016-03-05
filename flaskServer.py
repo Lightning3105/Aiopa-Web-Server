@@ -297,6 +297,16 @@ def getter():
 def root():
     return flask.render_template('home.html')
 
+@app.route('/static/<path:filename>')
+def serve_static(filename):
+    print(filename)
+    return flask.send_from_directory('static', filename)
+
+@app.route('/game/')
+def game():
+    return flask.render_template("game.html")
+    #return flask.send_from_directory('static', "game.html")
+
 @app.context_processor
 def inject_user():
     if not "username" in flask.session:
