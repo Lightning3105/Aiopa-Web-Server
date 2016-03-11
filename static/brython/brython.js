@@ -1,6 +1,6 @@
 // brython.js brython.info
 // version [3, 3, 0, 'alpha', 0]
-// implementation [3, 2, 5, 'final', 0]
+// implementation [3, 2, 6, 'alpha', 0]
 // version compiled from commented, indented source files at github.com/brython-dev/brython
 var __BRYTHON__=__BRYTHON__ ||{}
 ;(function($B){
@@ -57,10 +57,10 @@ $B.has_local_storage=false
 $B.has_session_storage=false}
 $B.globals=function(){
 return $B.frames_stack[$B.frames_stack.length-1][3]}})(__BRYTHON__)
-__BRYTHON__.implementation=[3,2,5,'final',0]
-__BRYTHON__.__MAGIC__="3.2.5"
+__BRYTHON__.implementation=[3,2,6,'alpha',0]
+__BRYTHON__.__MAGIC__="3.2.6"
 __BRYTHON__.version_info=[3,3,0,'alpha',0]
-__BRYTHON__.compiled_date="2016-02-28 21:52:46.465636"
+__BRYTHON__.compiled_date="2016-03-05 21:54:22.314894"
 __BRYTHON__.builtin_module_names=["posix","sys","errno","time","_ajax","_browser","_html","_jsre","_multiprocessing","_posixsubprocess","_svg","_sys","builtins","dis","hashlib","javascript","json","long_int","math","modulefinder","random","_abcoll","_codecs","_collections","_csv","_functools","_imp","_io","_random","_socket","_sre","_string","_struct","_sysconfigdata","_testcapi","_thread","_warnings","_weakref"]
 
 ;(function($B){var js,$pos,res,$op
@@ -592,8 +592,10 @@ loop_node=loop_node.parent}
 if(break_flag)break}}
 this.to_js=function(){this.js_processed=true
 var scope=$get_scope(this)
-var res=';$locals_'+scope.id.replace(/\./g,'_')
-return res + '["$no_break'+this.loop_ctx.loop_num+'"]=false;break;'}}
+var res=';$locals_'+scope.id.replace(/\./g,'_')+
+'["$no_break'+this.loop_ctx.loop_num+'"]=false'
+if(this.loop_ctx.type!='asyncfor'){res +=';break'}else{res +=';throw StopIteration('+this.loop_ctx.loop_num+')'}
+return res}}
 function $CallArgCtx(C){
 this.type='call_arg'
 this.toString=function(){return 'call_arg '+this.tree}
@@ -2196,7 +2198,9 @@ for(var rank=0;rank<pnode.children.length;rank++){if(pnode.children[rank]===node
 var pctx=pnode.children[rank-1].C
 if(pctx.tree.length>0){var elt=pctx.tree[0]
 if(elt.type=='for' ||
+elt.type=='asyncfor' ||
 (elt.type=='condition' && elt.token=='while')){elt.has_break=true
+elt.else_node=$get_node(this)
 this.loop_num=elt.loop_num}}}
 this.toString=function(){return this.token}
 this.to_js=function(){this.js_processed=true
@@ -4748,7 +4752,7 @@ var $GenExprDict={__class__:$B.$type,__name__:'generator',toString:function(){re
 $GenExprDict.__mro__=[$GenExprDict,_b_.object.$dict]
 $GenExprDict.__iter__=function(self){return self}
 $GenExprDict.__next__=function(self){self.$counter +=1
-if(self.$counter==self.value.length){throw _b_.StopIteration('')}
+if(self.$counter>=self.value.length){throw _b_.StopIteration('')}
 return self.value[self.$counter]}
 $GenExprDict.$factory={__class__:$B.$factory,$dict:$GenExprDict}
 var $res2={value:$res1,__class__:$GenExprDict,$counter:-1}
@@ -6746,7 +6750,7 @@ case 'browser':
 fake_qs=''
 break;
 default:
-fake_qs="?v="+$B.UUID()}
+fake_qs="?v="+(new Date().getTime())}
 var timer=setTimeout(function(){$xmlhttp.abort()
 throw _b_.ImportError("No module named '"+module+"'")},5000)
 return[$xmlhttp,fake_qs,timer]}

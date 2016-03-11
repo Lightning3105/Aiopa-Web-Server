@@ -242,6 +242,7 @@ TCP_MAXSEG = 4
 
 TCP_NODELAY = 1
 
+print("socket")
 __loader__ = '<_frozen_importlib.ExtensionFileLoader object at 0x00CA2D90>'
 
 def dup(*args,**kw):

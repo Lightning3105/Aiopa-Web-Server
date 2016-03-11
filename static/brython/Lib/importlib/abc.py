@@ -2,6 +2,7 @@
 from . import _bootstrap
 from . import machinery
 try:
+    print("ABC FROZEN IMPORTLIB")
     import _frozen_importlib
 except ImportError as exc:
     if exc.name != '_frozen_importlib':

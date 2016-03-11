@@ -280,7 +280,8 @@ def getmode(fmt):
 def getNum(fmt,i):
     num=None
     cur = fmt[i]
-    while ('0'<= cur ) and ( cur <= '9'):
+    print("STRUCT CUR: " + str(cur))
+    while (0<= cur ) and ( cur <= 9):
         if num == None:
             num = int(cur)
         else:

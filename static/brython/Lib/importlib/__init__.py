@@ -15,8 +15,11 @@ import sys
 from . import machinery   #fix me brython
 
 try:
+    print("FROZEN IMPORTLIB")
     import _frozen_importlib as _bootstrap
-except ImportError:
+    print("FROZEN IMPORTLIB GOT")
+except:
+    print("FAILED FROZEN IMPORTLIB")
     from . import _bootstrap
     _bootstrap._setup(sys, _imp)
 else:
