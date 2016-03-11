@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>404 Error</title>
+	<link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css" />
+	<link href="{{ url_for('static', filename='favicon.ico') }}" rel="shortcut icon" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+</head>
+<body onload="setActive()">
+
+<ul id="navbar">
+  <li><a href="{{url_for('root')}}">Home</a></li>
+  <li><a href="{{url_for('leaderboard')}}">Leaderboard</a></li>
+  <li><a href="{{url_for('manageservers')}}">Manage Servers</a></li>
+  <li class="dropdown">
+    <a href="#" class="dropbtn">Developer Tools</a>
+    <div class="dropdown-content">
+      <a href="{{url_for('calltimes')}}">Function Calltimes</a>
+      <a href="{{url_for('calltimes')}}">Crash Reports</a>
+      <a href="{{url_for('server')}}">Accounts</a>
+    </div></li>
+  <ul style="float:right;list-style-type:none;">
+    <li><a href="{{url_for('login')}}">Login</a></li>
+    <li><a href="{{url_for('createaccount')}}">Create Account</a></li>
+  </ul>
+</ul>
+<script>
+function setActive() {
+  aObj = document.getElementById('navbar').getElementsByTagName('a');
+  for(i=0;i<aObj.length;i++) {
+    if(document.location.href == aObj[i].href) {
+      aObj[i].className='active';
+    }
+    console.log("{{user}}");
+    if(aObj[i].innerHTML == "Login") {
+      if("{{user}}" != "") {
+        aObj[i].parentElement.className = "dropdown";
+        aObj[i].parentElement.innerHTML = '<a href="#" class="dropbtn">{{user}}</a> \
+                                            <div class="dropdown-content"> \
+                                              <a href="{{url_for('logout')}}">Logout</a> \
+                                            </div></li>'
+      }
+    }
+  }
+}
+</script>
+
+<h>Page Not Found (Error 404)</h>
+
+<p>For some reason, the page you were looking for does not exist. Sorry!</p>
+
+</body>
+</html>

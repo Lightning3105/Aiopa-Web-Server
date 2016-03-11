@@ -3,11 +3,14 @@
 <html>
 
 <head>
-<script src="/static/bt/brython.js"></script>
+<script src="/static/brython/brython.js"></script>
+<script type="text/javascript" src="/static/brython/py_VFS.js"></script>
 </head>
 
-<body onload="brython({pythonpath:['/static/src']})">
-<script type="text/python" src="/static/src/run.py"></script>
+<body onload="brython(1)">
+<script type="text/python" src="/static/LOA/runGame.py"></script>
+<div id="pydiv">
+</div>
 </body>
 
 </html>

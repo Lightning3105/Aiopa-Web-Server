@@ -297,13 +297,61 @@ def getter():
 def root():
     return flask.render_template('home.html')
 
+#####
+#Begin python module paths
+#####
 @app.route('/static/<path:filename>')
 def serve_static(filename):
     print(filename)
     return flask.send_from_directory('static', filename)
 
+@app.route('/game/<filename>')
+def sendModule(filename):
+    print("sendModule", filename)
+    if "_pygame_" in filename:
+        filename = filename.replace("_pygame_", "")
+        return flask.send_file('static/pygame/' + filename)
+    elif filename == "_saves_mapFile.py":
+        return flask.send_file('static/LOA/Saves/__init__.py')
+    elif filename == "requests.py":
+        return flask.send_file('static/LOA/requests/__init__.py')
+    elif not filename == "pygame.py":
+        try:
+            return flask.send_file('static/LOA/' + filename)
+        except FileNotFoundError:
+            try:
+                return flask.send_file('static/pygame/' + filename)
+            except FileNotFoundError:
+                return flask.send_file('static/brython/Lib/site-packages/' + filename.replace(".py", "") + "/__init__.py")
+    else:
+        return flask.send_file('static/pygame/__init__.py')
+
+@app.route('/Lib/<filename>')
+def sendLibModule(filename):
+    print("sendModule", filename)
+    return flask.send_file('static/brython/Lib/' + filename)
+
+@app.route('/Lib/<filename>/__init__.py')
+def sendLibModuleInit(filename):
+    print("sendModule", filename, "__init__.py")
+    return flask.send_file('static/brython/Lib/' + filename + "/__init__.py")
+
+@app.route('/Lib/<path>/<filename>')
+def sendLibModuleFolder(path, filename):
+    print("sendModule", filename, "__init__.py")
+    return flask.send_file('static/brython/Lib/' + path + "/" + filename)
+
+@app.route('/libs/<filename>')
+def sendLibsModule(filename):
+    print("sendModule", filename)
+    return flask.send_file('static/brython/libs/' + filename)
+
+#####
+#End python module paths
+#####
+
 @app.route('/game/')
-def game():
+def game(): #{pythonpath:['/static/src']}
     return flask.render_template("game.html")
     #return flask.send_from_directory('static', "game.html")
 
@@ -312,6 +360,7 @@ def inject_user():
     if not "username" in flask.session:
         flask.session["username"] = ""
     return dict(user=flask.session["username"])
+
 
 @app.route('/accountcreated/', methods=['POST'])
 def accountcreated():
@@ -332,8 +381,8 @@ def accountcreated():
     flask.session["username"] = username
     return flask.render_template('form_action.html', username=username, password=password)
 
-@app.route("/multiplayer/<server>", methods=['GET','POST'])
-def multiplayer(server): #TODO: Logging off of clients
+@app.route("/mp/<server>", methods=['GET','POST'])
+def mp(server): #TODO: Logging off of clients
     print("SERVER:", server)
     file = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, "data/servers/" + server + ".dab"))
     checkServers()
@@ -446,6 +495,10 @@ def manageservers(req="POST"):
                 pickle.dump(acc, accfile)
             print("RE MANAGE")
             return manageservers("GET")
+
+@app.errorhandler(404)
+def fourOhFour(error):
+    return flask.render_template('Error_404.html')
         
 if __name__ == "__main__":
     accdab = os.path.join(os.path.dirname(__file__),'accounts.dab')
