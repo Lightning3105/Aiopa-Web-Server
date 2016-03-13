@@ -30,22 +30,27 @@ def rect(canvas, color, r, width=0, outline=None, blend=1):
     coordinates = [[], [], [], []]
     coordinates[0] = (r[0], r[1])
     coordinates[1] = (r[0] + r[2], r[1])
-    coordinates[2] = (r[0], r[1] + r[3])
-    coordinates[0] = (r[0] + r[2], r[1] + r[3])
-    #console.log("aapolygon")
-    if canvas not in dm:
-       dm["canvas"]=DrawManager(canvas)
-       dm["canvas"].process()
-
-    _dp=DrawPolygon(coordinates, color, width, outline, speed=10)
-    dm["canvas"].add_polygon(_dp)
+    coordinates[2] = (r[0] + r[2], r[1] + r[3])
+    coordinates[3] = (r[0], r[1] + r[3])
+    
+    if width > 0:
+        #console.log("aapolygon")
+        if canvas not in dm:
+           dm["canvas"]=DrawManager(canvas)
+           dm["canvas"].process()
+        _dp=DrawPolygon(coordinates, color, width, outline, speed=10)
+        dm["canvas"].add_polygon(_dp)
+    else:
+        import _pygame_surface as surf
+        s = surf.Surface((r[2], r[3]))
+        s.fill(color)
+        canvas.blit(s, (r[0], r[1]))
 
 
 def line(canvas, color, startpos, endpos, width=1, blend=1):
     #console.log("aaline")
     if canvas not in dm:
        dm["canvas"]=DrawManager(canvas)
-       print(dm)
        dm["canvas"].process()
 
     _dl=DrawLine(startpos[0], startpos[1], endpos[0], endpos[1], color, 
@@ -56,7 +61,6 @@ def aaline(canvas, color, startpos, endpos, width, outline, blend=1):
     #console.log("aaline")
     if canvas not in dm:
        dm["canvas"] = DrawManager(canvas)
-       print(dm)
        dm["canvas"].process()
 
     _dl=DrawLine(startpos[0], startpos[1], endpos[0], endpos[1], color, 

@@ -300,10 +300,31 @@ def root():
 #####
 #Begin python module paths
 #####
-@app.route('/static/<path:filename>')
+"""@app.route('/static/<path:filename>')
 def serve_static(filename):
     print(filename)
     return flask.send_from_directory('static', filename)
+
+@app.route('/game/runGame.<cache>')
+def sendCache(cache):
+    print("SEND CACHE")
+    print('static/LOA2/output/runGame.' + str(cache))
+    return flask.send_file('static/LOA2/output/runGame.' + str(cache))
+
+@app.route('/game/\\static\\LOA2\\output\\bootstrap.js')
+def sendBootstrap():
+    print("send bootstrap")
+    return flask.send_file('static/LOA2/output/bootstrap.js')
+
+@app.route('/game/lib/<file>')
+def sendGameLib(file):
+    print("SEND Lib FILE: " + file)
+    return flask.send_file('static/LOA2/output/lib/' + file)
+
+@app.route('/game/Resources/Fonts/<file>')
+def sendGameFIle(file):
+    print("SEND Resource Font FILE: " + file)
+    return flask.send_file('static/LOA2/Resources/Fonts/' + file)"""
 
 @app.route('/game/<filename>')
 def sendModule(filename):
@@ -496,9 +517,9 @@ def manageservers(req="POST"):
             print("RE MANAGE")
             return manageservers("GET")
 
-@app.errorhandler(404)
+"""@app.errorhandler(404)
 def fourOhFour(error):
-    return flask.render_template('Error_404.html')
+    return flask.render_template('Error_404.html')"""
         
 if __name__ == "__main__":
     accdab = os.path.join(os.path.dirname(__file__),'accounts.dab')
