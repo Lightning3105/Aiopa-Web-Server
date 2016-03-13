@@ -478,13 +478,13 @@ def mp(server):
             sdict["players"][un]["online"] = True
             pickle.dump(sdict, svr)
         
-            with open(file, "rb") as svr:
-                sdict = pickle.load(svr)
-            for player, value in sdict["players"].items():
-                if time.time() - value["last call"] > 5:
-                    sdict["players"][player]["online"] = False
-            with open(file, "wb") as svr:
-                pickle.dump(sdict, svr)
+        with open(file, "rb") as svr:
+            sdict = pickle.load(svr)
+        for player, value in sdict["players"].items():
+            if time.time() - value["last call"] > 5:
+                sdict["players"][player]["online"] = False
+        with open(file, "wb") as svr:
+            pickle.dump(sdict, svr)
     
         return str(sdict)
 
