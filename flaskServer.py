@@ -138,17 +138,16 @@ def checkServers():
                         with open(file, 'rb') as svr: 
                             pickle.load(svr)
                     except EOFError as e:
+                        print("CHECK SERVERS EOFERROR" + str(e))
                         with open(file, 'wb') as svr: 
                             pickle.dump({}, svr)
                     with open(file, "rb") as svr:
                         dab = pickle.load(svr)
                         if not "players" in dab.keys():
                             dab["players"] = {}
-                    print(dab, sv)
                     dab["name"] = sv["name"]
                     dab["password"] = sv["password"]
                     dab["admin"] = sv["admin"]
-                    print(dab)
                     try:
                         for player, value in dab["players"].items():
                             if time.time() - value["last call"] > 5:
