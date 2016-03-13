@@ -415,6 +415,7 @@ def serverView(server):
 
 @app.route("/mp/<server>/get")
 def serverGet(server):
+    checkServers()
     file = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, "data/servers/" + server + ".dab"))
     with open(file, 'rb') as svr:
         sdict = pickle.load(svr)
