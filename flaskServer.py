@@ -149,6 +149,12 @@ def checkServers():
                     dab["password"] = sv["password"]
                     dab["admin"] = sv["admin"]
                     print(dab)
+                    try:
+                        for player, value in dab["players"].items():
+                            if time.time() - value["last call"] > 5:
+                                dab["players"][player]["online"] = False
+                    except Exception as e:
+                        print(e)
                     with open(file, "wb") as sv:
                         pickle.dump(dab, sv)
                             
@@ -404,6 +410,7 @@ def accountcreated():
 
 @app.route("/mp/<server>/manage")
 def serverView(server):
+    checkServers()
     return flask.render_template('view_server.html', name=server)
 
 @app.route("/mp/<server>/get")
