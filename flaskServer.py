@@ -136,14 +136,14 @@ def checkServers():
                     if not os.path.exists(file):
                         with open(file, "wb") as svr:
                             pickle.dump({}, svr)
-                    try:
+                    """try:
                         with open(file, 'rb') as svr: 
                             pickle.load(svr)
                     except EOFError as e:
                         with open(file, 'rb') as svr:
                             print("CHECK SERVERS EOFERROR" + str(svr.read()))
                         with open(file, 'wb') as svr: 
-                            pickle.dump({}, svr)
+                            pickle.dump({}, svr)"""
                     with open(file, "rb") as svr:
                         dab = pickle.load(svr)
                         if not "players" in dab.keys():
@@ -439,62 +439,53 @@ def mp(server):
     
     
     if flask.request.method == "POST":
-        try:
-            from ast import literal_eval
-            data = flask.request.data
-            data = data.decode("utf-8")
-            print("DATA:", data)
-            data = json.loads(data)
-            data = literal_eval(data)
-            
-            if "connect" in data.keys():
-                un = data['username']
-                del data['username']
-                del data["connect"]
-                with open(file, 'rb') as svr:
-                    sdict = pickle.load(svr)
-                with open(file, 'wb') as svr:
-                    if not un in sdict.keys():
-                        sdict["players"][un] = {}
-                    sdict["players"][un].update(data)
-                    sdict["players"][un]["last call"] = time.time()
-                    sdict["players"][un]["online"] = True
-                    sdict["players"][un]["online"] = None
-                    pickle.dump(sdict, svr)
-            if "disconnect" in data.keys():
-                with open(file, 'rb') as svr:
-                    sdict = pickle.load(svr)
-                un = data['username']
-                del sdict["players"][un]
-                with open(file, "wb") as svr:
-                    pickle.dump(sdict, svr)
-            try:
-                un = data['username']
-                del data['username']
-                with open(file, 'rb') as svr:
-                    sdict = pickle.load(svr)
-                with open(file, 'wb') as svr:
-                    sdict["players"][un].update(data)
-                    sdict["players"][un]["last call"] = time.time()
-                    sdict["players"][un]["online"] = True
-                    pickle.dump(sdict, svr)
-            except Exception as e:
-                print(e)
-            
-            try:
-                with open(file, "rb") as svr:
-                    sdict = pickle.load(svr)
-                for player, value in sdict["players"].items():
-                    if time.time() - value["last call"] > 5:
-                        sdict["players"][player]["online"] = False
-                with open(file, "wb") as svr:
-                    pickle.dump(sdict, svr)
-            except Exception as e:
-                print(e)
-        except Exception as e:
-            print("EXCEPTION: " + str(e))
-            return "EXCEPTION: " + str(e)
+        from ast import literal_eval
+        data = flask.request.data
+        data = data.decode("utf-8")
+        print("DATA:", data)
+        data = json.loads(data)
+        data = literal_eval(data)
         
+        if "connect" in data.keys():
+            un = data['username']
+            del data['username']
+            del data["connect"]
+            with open(file, 'rb') as svr:
+                sdict = pickle.load(svr)
+            with open(file, 'wb') as svr:
+                if not un in sdict.keys():
+                    sdict["players"][un] = {}
+                sdict["players"][un].update(data)
+                sdict["players"][un]["last call"] = time.time()
+                sdict["players"][un]["online"] = True
+                sdict["players"][un]["online"] = None
+                pickle.dump(sdict, svr)
+        if "disconnect" in data.keys():
+            with open(file, 'rb') as svr:
+                sdict = pickle.load(svr)
+            un = data['username']
+            del sdict["players"][un]
+            with open(file, "wb") as svr:
+                pickle.dump(sdict, svr)
+            
+        un = data['username']
+        del data['username']
+        with open(file, 'rb') as svr:
+            sdict = pickle.load(svr)
+        with open(file, 'wb') as svr:
+            sdict["players"][un].update(data)
+            sdict["players"][un]["last call"] = time.time()
+            sdict["players"][un]["online"] = True
+            pickle.dump(sdict, svr)
+        
+            with open(file, "rb") as svr:
+                sdict = pickle.load(svr)
+            for player, value in sdict["players"].items():
+                if time.time() - value["last call"] > 5:
+                    sdict["players"][player]["online"] = False
+            with open(file, "wb") as svr:
+                pickle.dump(sdict, svr)
+    
         return str(sdict)
 
 @app.route("/manageservers", methods=['GET','POST'])       
