@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Add User</title>
+	<title>{{name}}</title>
 	<link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css" />
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+	<link href="{{ url_for('static', filename='favicon.ico') }}" rel="shortcut icon" />
+
 </head>
 <body onload="setActive()">
 
 <ul id="navbar">
   <li><a href="{{url_for('root')}}">Home</a></li>
   <li><a href="{{url_for('leaderboard')}}">Leaderboard</a></li>
+  <li><a href="{{url_for('manageservers')}}">Manage Servers</a></li>
   <li class="dropdown">
     <a href="#" class="dropbtn">Developer Tools</a>
     <div class="dropdown-content">
@@ -41,19 +43,28 @@ function setActive() {
     }
   }
 }
+
+function httpGet(theUrl)
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+    xmlHttp.send( null );
+    return xmlHttp.responseText;
+}
+
+window.onload = function start() {
+    update();
+}
+function update() {
+    var para = document.getElementById('dict');
+    window.setInterval(function () {
+        out = httpGet("{{url_for('serverGet', server=name)}}")
+        para.innerHTML = out
+    }, 1000); // repeat forever, polling every 3 seconds
+}
 </script>
 
-<p>&nbsp;</p>
+<p id="dict">NOPE!</p>
 
-<h1 style="text-align: center; font-size: 500%;"><strong>Login</strong></h1>
-
-<div id="content">
-<form action="{{ url_for('login') }}" method="post">
-<p style="text-align: center;"><label for="username">Please enter your username:</label><label for="username"><font color="red">{{unerror}}</font></label> <input name="username" type="text" value="{{uname}}"/><br />
-<label for="password">Please enter your password:</label> <label for="username"><font color="red">{{pwerror}}</font></label> <input name="password" type="password" /><br />
-<br />
-<input type="submit" value="Submit" />&nbsp;</p>
-</form>
-</div>
 </body>
 </html>

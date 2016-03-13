@@ -155,8 +155,7 @@ def checkServers():
 
 
 @app.route('/accounts/')
-def server():
-
+def accounts():
     print("ACCOUNTS")
     checkDatabase()
     f = open(accdab, 'rb')
@@ -402,12 +401,29 @@ def accountcreated():
     flask.session["username"] = username
     return flask.render_template('form_action.html', username=username, password=password)
 
+
+@app.route("/mp/<server>/manage")
+def serverView(server):
+    return flask.render_template('view_server.html', name=server)
+
+@app.route("/mp/<server>/get")
+def serverGet(server):
+    file = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, "data/servers/" + server + ".dab"))
+    with open(file, 'rb') as svr:
+        sdict = pickle.load(svr)
+    return str(sdict)
+
+
+
 @app.route("/mp/<server>", methods=['GET','POST'])
 def mp(server): #TODO: Logging off of clients
     print("SERVER:", server)
     file = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, "data/servers/" + server + ".dab"))
     checkServers()
+    print("BROWSER:", flask.request.user_agent.browser)
     if flask.request.method == "GET":
+        if not flask.request.user_agent.browser == None:
+            return flask.redirect(flask.url_for("serverView", server=server), 302)
         with open(file, 'rb') as svr:
             sdict = pickle.load(svr)
         return str(sdict)
