@@ -59,8 +59,8 @@ def login():
         unerr = ""
         pwerr = ""
         checkDatabase()
-        accfile = open(accdab, 'rb')
-        acc = pickle.load(accfile)
+        with open(accdab, 'rb') as accfile:
+            acc = pickle.load(accfile)
         print(acc)
         if username in acc.keys():
             password = hashlib.md5(password.encode())
@@ -89,11 +89,12 @@ def logout():
 def checkDatabase():
     print("CHECK DATABASE")
     try:
-        f = open(accdab, 'rb')
+        with open(accdab, 'rb') as f:
+            pass
     except FileNotFoundError:
         print("FILE NOT FOUND")
-        f = open(accdab, 'wb')
-        f.close()
+        with open(accdab, 'wb') as f:
+            pass
     try:
         with open(accdab, 'rb') as f: 
             pickle.load(f)
@@ -108,11 +109,12 @@ def checkDatabase():
     #Statistics Database
     print("CHECK STATS")
     try:
-        f = open(statdab, 'rb')
+        with open(statdab, 'rb') as f:
+            pass
     except FileNotFoundError:
         print("FILE NOT FOUND")
-        f = open(statdab, 'wb')
-        f.close()
+        with open(statdab, 'wb') as f:
+            pass
     try:
         with open(statdab, 'rb') as f: 
             pickle.load(f)
@@ -138,7 +140,8 @@ def checkServers():
                         with open(file, 'rb') as svr: 
                             pickle.load(svr)
                     except EOFError as e:
-                        print("CHECK SERVERS EOFERROR" + str(e))
+                        with open(file, 'rb') as svr:
+                            print("CHECK SERVERS EOFERROR" + str(svr.read()))
                         with open(file, 'wb') as svr: 
                             pickle.dump({}, svr)
                     with open(file, "rb") as svr:
@@ -163,11 +166,10 @@ def checkServers():
 def accounts():
     print("ACCOUNTS")
     checkDatabase()
-    f = open(accdab, 'rb')
-    print("FILE:")
-    out = f.read()
-    acc = pickle.loads(out)
-    f.close()
+    with open(accdab, 'rb') as f:
+        print("FILE:")
+        out = f.read()
+        acc = pickle.loads(out)
     print(acc)
     """for k, v in acc.items():
         hash_object = hashlib.md5(v['password'].encode())
@@ -423,7 +425,7 @@ def serverGet(server):
 
 
 @app.route("/mp/<server>", methods=['GET','POST'])
-def mp(server): #TODO: Logging off of clients
+def mp(server):
     print("SERVER:", server)
     file = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, "data/servers/" + server + ".dab"))
     checkServers()
