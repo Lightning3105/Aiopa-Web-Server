@@ -451,6 +451,13 @@ def mp(server): #TODO: Logging off of clients
                 sdict["players"][un]["online"] = True
                 sdict["players"][un]["online"] = None
                 pickle.dump(sdict, svr)
+        if "disconnect" in data.keys():
+            with open(file, 'rb') as svr:
+                sdict = pickle.load(svr)
+            un = data['username']
+            del sdict["players"][un]
+            with open(file, "wb") as svr:
+                pickle.dump(sdict, svr)
         try:
             un = data['username']
             del data['username']
