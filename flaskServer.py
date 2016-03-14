@@ -136,14 +136,14 @@ def checkServers():
                     if not os.path.exists(file):
                         with open(file, "wb") as svr:
                             pickle.dump({}, svr)
-                    """try:
+                    try:
                         with open(file, 'rb') as svr: 
                             pickle.load(svr)
                     except EOFError as e:
                         with open(file, 'rb') as svr:
                             print("CHECK SERVERS EOFERROR" + str(svr.read()))
                         with open(file, 'wb') as svr: 
-                            pickle.dump({}, svr)"""
+                            pickle.dump({}, svr)
                     with open(file, "rb") as svr:
                         dab = pickle.load(svr)
                         if not "players" in dab.keys():
@@ -426,10 +426,10 @@ def serverGet(server):
 
 @app.route("/mp/<server>", methods=['GET','POST'])
 def mp(server):
-    print("SERVER:", server)
+    #print("SERVER:", server)
     file = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, "data/servers/" + server + ".dab"))
     checkServers()
-    print("BROWSER:", flask.request.user_agent.browser)
+    #print("BROWSER:", flask.request.user_agent.browser)
     if flask.request.method == "GET":
         if not flask.request.user_agent.browser == None:
             return flask.redirect(flask.url_for("serverView", server=server), 302)
@@ -442,7 +442,7 @@ def mp(server):
         from ast import literal_eval
         data = flask.request.data
         data = data.decode("utf-8")
-        print("DATA:", data)
+        #print("DATA:", data)
         data = json.loads(data)
         data = literal_eval(data)
         
@@ -460,6 +460,7 @@ def mp(server):
                 sdict["players"][un]["online"] = True
                 sdict["players"][un]["online"] = None
                 pickle.dump(sdict, svr)
+            return str(sdict)
         if "disconnect" in data.keys():
             with open(file, 'rb') as svr:
                 sdict = pickle.load(svr)
@@ -467,6 +468,7 @@ def mp(server):
             del sdict["players"][un]
             with open(file, "wb") as svr:
                 pickle.dump(sdict, svr)
+            return str(sdict)
             
         un = data['username']
         del data['username']
