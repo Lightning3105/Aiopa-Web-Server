@@ -138,17 +138,16 @@ def checkServers():
                     with open(file, "wb") as svr:
                         pickle.dump({}, svr)
                 
-                while True:
+                EOF = False
+                for i in range(10):
                     try:
-                        with open(file, "ab", 8) as f:
-                            break
-                    except IOError as e:
-                        print("IOERROR: ", e)
-                
-                try:
-                    with open(file, 'rb') as svr: 
-                        pickle.load(svr)
-                except EOFError as e:
+                        with open(file, 'rb') as svr: 
+                            pickle.load(svr)
+                        EOF = False
+                        break
+                    except EOFError as e:
+                        EOF = True
+                if EOF:
                     with open(file, 'rb') as svr:
                         print("CHECK SERVERS EOFERROR" + str(svr.read()))
                     with open(file, 'wb') as svr: 
