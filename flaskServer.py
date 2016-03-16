@@ -466,6 +466,7 @@ def mp(server):
                 sdict["players"][un].update(data)
                 sdict["players"][un]["last call"] = time.time()
                 sdict["players"][un]["online"] = True
+                sdict["players"][un]["position"] = (0, 0)
                 pickle.dump(sdict, svr)
             return str(sdict)
         if "disconnect" in data.keys():
