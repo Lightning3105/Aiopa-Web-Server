@@ -127,38 +127,47 @@ def checkDatabase():
     print("POST CHECK STATS")
 
 def checkServers():
+    print("CHECK SERVERS")
     with open(accdab, "rb") as acc:
         accounts = pickle.load(acc)
-        for name, value in accounts.items():
-            if "servers" in value.keys():
-                for sv in value["servers"]:
-                    file = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, "data/servers/" + sv["name"] + ".dab"))
-                    if not os.path.exists(file):
-                        with open(file, "wb") as svr:
-                            pickle.dump({}, svr)
+    for name, value in accounts.items():
+        if "servers" in value.keys():
+            for sv in value["servers"]:
+                file = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, "data/servers/" + sv["name"] + ".dab"))
+                if not os.path.exists(file):
+                    with open(file, "wb") as svr:
+                        pickle.dump({}, svr)
+                
+                while True:
                     try:
-                        with open(file, 'rb') as svr: 
-                            pickle.load(svr)
-                    except EOFError as e:
-                        with open(file, 'rb') as svr:
-                            print("CHECK SERVERS EOFERROR" + str(svr.read()))
-                        with open(file, 'wb') as svr: 
-                            pickle.dump({}, svr)
-                    with open(file, "rb") as svr:
-                        dab = pickle.load(svr)
-                        if not "players" in dab.keys():
-                            dab["players"] = {}
-                    dab["name"] = sv["name"]
-                    dab["password"] = sv["password"]
-                    dab["admin"] = sv["admin"]
-                    try:
-                        for player, value in dab["players"].items():
-                            if time.time() - value["last call"] > 5:
-                                dab["players"][player]["online"] = False
-                    except Exception as e:
-                        print(e)
-                    with open(file, "wb") as sv:
-                        pickle.dump(dab, sv)
+                        with open(file, "ab", 8) as f:
+                            break
+                    except IOError as e:
+                        print("IOERROR: ", e)
+                
+                try:
+                    with open(file, 'rb') as svr: 
+                        pickle.load(svr)
+                except EOFError as e:
+                    with open(file, 'rb') as svr:
+                        print("CHECK SERVERS EOFERROR" + str(svr.read()))
+                    with open(file, 'wb') as svr: 
+                        pickle.dump({}, svr)
+                with open(file, "rb") as svr:
+                    dab = pickle.load(svr)
+                    if not "players" in dab.keys():
+                        dab["players"] = {}
+                dab["name"] = sv["name"]
+                dab["password"] = sv["password"]
+                dab["admin"] = sv["admin"]
+                try:
+                    for player, value in dab["players"].items():
+                        if time.time() - value["last call"] > 5:
+                            dab["players"][player]["online"] = False
+                except Exception as e:
+                    print(e)
+                with open(file, "wb") as sv:
+                    pickle.dump(dab, sv)
                             
 
 
@@ -458,7 +467,6 @@ def mp(server):
                 sdict["players"][un].update(data)
                 sdict["players"][un]["last call"] = time.time()
                 sdict["players"][un]["online"] = True
-                sdict["players"][un]["online"] = None
                 pickle.dump(sdict, svr)
             return str(sdict)
         if "disconnect" in data.keys():
