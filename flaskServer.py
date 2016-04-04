@@ -17,6 +17,11 @@ def startServer():
     app.debug = True
     app.run()
 
+@app.route('/dl-cx_freeze/')
+def dlCx_freeze():
+    return flask.send_file(os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, "cx_Freeze.zip")))
+
+
 @app.route('/createaccount/', methods=['GET', 'POST'])
 def createaccount():
     if flask.request.method == 'GET':
